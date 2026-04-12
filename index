@@ -3,1066 +3,841 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Aqua — Water Pollution & Its Consequences</title>
+<title>Hydra — The Global Water Pollution Crisis</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Outfit:wght@300;400;500;600&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
 <style>
 :root {
-  --black:#060c0f;--dark:#0d1a20;--charcoal:#122030;--smoke:#1a2e3d;
-  --ash:#2e4a5a;--stone:#4a7080;--sand:#b8d4dc;--parch:#e8f4f8;--white:#f4fafc;
-  --amber:#00b4d8;--ember:#0077b6;--forest:#023e58;--moss:#0a6070;
-  --fern:#1a8a9a;--mint:#48cae4;--ice:#90e0ef;--ocean:#023e8a;--wave:#0096c7;
-  --danger:#e63946;--warn:#f4a261;--ok:#52b788;
+  --bg:#f2ede6;--bg2:#e8e2d9;--ink:#0f0e0c;--ink2:#2a2825;
+  --muted:#7a7570;--line:#cbc5bb;--white:#faf8f5;
+  --acc:#1a4fff;--acc2:#e8380d;--acc3:#0aab6e;--acc4:#f5a623;
+  --danger-bg:#ffeaea;--warn-bg:#fff8e6;--ok-bg:#e5f7ee;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{font-family:'Outfit',sans-serif;background:var(--black);color:var(--white);overflow-x:hidden;cursor:none}
-img{display:block;max-width:100%}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);overflow-x:hidden}
 a{text-decoration:none;color:inherit}
+img{display:block;max-width:100%}
+::selection{background:var(--acc);color:#fff}
 
-.cursor{position:fixed;width:10px;height:10px;background:var(--mint);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .3s,height .3s;mix-blend-mode:difference}
-.cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(72,202,228,.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:left .06s,top .06s,width .3s,height .3s}
-#progress{position:fixed;top:0;left:0;height:2px;width:0%;background:linear-gradient(90deg,var(--mint),var(--ember));z-index:1000}
+#rbar{position:fixed;top:0;left:0;height:3px;width:0%;background:var(--acc2);z-index:1000}
 
-nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:1.5rem 4rem;transition:background .4s,padding .4s}
-nav.scrolled{background:rgba(6,12,15,.92);backdrop-filter:blur(16px);padding:1rem 4rem;border-bottom:1px solid rgba(72,202,228,.08)}
-.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:.15em}
-.nav-logo span{color:var(--mint)}
-.nav-links{display:flex;gap:2.5rem;list-style:none;align-items:center}
-.nav-links a{font-size:.78rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.6);transition:color .2s;position:relative}
-.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--mint);transition:width .3s}
-.nav-links a:hover{color:var(--white)}
-.nav-links a:hover::after{width:100%}
-.nav-cta{background:var(--ember)!important;color:var(--white)!important;padding:.5rem 1.4rem;border-radius:2px;font-weight:600!important}
-.nav-cta::after{display:none!important}
-.nav-cta:hover{background:var(--wave)!important}
+/* NAV */
+header{position:sticky;top:0;z-index:600;background:var(--bg);border-bottom:1.5px solid var(--ink);display:flex;align-items:stretch;height:52px}
+.nav-issue{writing-mode:vertical-lr;transform:rotate(180deg);font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;padding:.6rem .75rem;border-right:1.5px solid var(--ink);color:var(--muted);white-space:nowrap;display:flex;align-items:center}
+.nav-brand{display:flex;align-items:center;padding:0 1.4rem;border-right:1.5px solid var(--ink);font-family:'DM Serif Display',serif;font-size:1.5rem;letter-spacing:-.02em}
+.nav-brand em{font-style:italic;color:var(--acc2)}
+.nav-links{display:flex;align-items:stretch;list-style:none;margin-left:auto}
+.nav-links li{border-left:1.5px solid var(--ink)}
+.nav-links a{display:flex;align-items:center;padding:0 1rem;font-size:.7rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);transition:background .15s,color .15s;height:100%}
+.nav-links a:hover{background:var(--ink);color:var(--white)}
+.nav-cta-li a{background:var(--acc2)!important;color:#fff!important}
+.nav-cta-li a:hover{background:#c42d00!important}
+@media(max-width:900px){.nav-links{display:none}.nav-issue{display:none}}
 
-#hero{position:relative;width:100%;height:100vh;overflow:hidden;display:flex;align-items:flex-end}
-.hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1621451537084-482c73073a0f?w=1800&q=90') center/cover no-repeat;animation:heroZoom 14s ease-in-out infinite alternate}
-@keyframes heroZoom{from{transform:scale(1.05)}to{transform:scale(1.12)}}
-.hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(6,12,15,1) 0%,rgba(6,12,15,.6) 45%,rgba(6,12,15,.15) 100%)}
-.hero-side{position:absolute;right:2.5rem;top:50%;transform:translateY(-50%) rotate(90deg);font-size:.68rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.25);white-space:nowrap}
-.hero-content{position:relative;z-index:2;width:100%;padding:0 4rem 5rem}
-.hero-eyebrow{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;opacity:0;animation:slideUp .8s .2s ease forwards}
-.hero-eyebrow span{font-size:.72rem;font-weight:500;letter-spacing:.25em;text-transform:uppercase;color:var(--mint)}
-.eyebrow-line{width:40px;height:1px;background:var(--mint)}
-.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(4rem,10vw,9rem);font-weight:300;line-height:.92;letter-spacing:-.02em;opacity:0;animation:slideUp .9s .4s ease forwards}
-.hero-title em{font-style:italic;color:var(--mint)}
-.hero-title .outline{-webkit-text-stroke:1px rgba(255,255,255,.35);color:transparent}
-.hero-bottom{display:flex;align-items:flex-end;justify-content:space-between;margin-top:2.5rem;opacity:0;animation:slideUp .9s .7s ease forwards}
-.hero-desc{max-width:480px;font-size:1rem;line-height:1.8;color:rgba(255,255,255,.6);font-weight:300}
-.hero-stats-row{display:flex;gap:2.5rem}
-.h-stat .num{font-family:'Bebas Neue',sans-serif;font-size:2.8rem;color:var(--white);line-height:1;display:block;letter-spacing:.05em}
-.h-stat .num span{color:var(--mint);font-size:1.8rem}
-.h-stat .lbl{font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-top:.2rem}
-.scroll-hint{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.5rem;z-index:2;opacity:0;animation:fadeIn 1s 1.4s ease forwards}
-.scroll-hint span{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.25)}
-.scroll-arrow{width:20px;height:30px;border:1px solid rgba(255,255,255,.15);border-radius:10px;position:relative}
-.scroll-arrow::after{content:'';position:absolute;top:5px;left:50%;transform:translateX(-50%);width:4px;height:4px;background:var(--mint);border-radius:50%;animation:bounce 1.5s ease infinite}
-@keyframes bounce{0%,100%{top:5px;opacity:1}50%{top:16px;opacity:.3}}
-@keyframes slideUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+/* MASTHEAD */
+.masthead{display:grid;grid-template-columns:1fr 1fr;min-height:92vh;border-bottom:1.5px solid var(--ink)}
+.masthead-left{padding:3rem 3rem 2.5rem;display:flex;flex-direction:column;justify-content:space-between;border-right:1.5px solid var(--ink)}
+.eyebrow-row{display:flex;align-items:center;gap:.8rem;margin-bottom:1rem}
+.chip{font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;background:var(--acc2);color:#fff;padding:.22rem .65rem;border-radius:1px}
+.eyebrow-date{font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:.1em;color:var(--muted)}
+.mast-title{font-family:'DM Serif Display',serif;font-size:clamp(3rem,6.5vw,7.2rem);line-height:.9;letter-spacing:-.03em;margin-bottom:1.2rem}
+.mast-title em{font-style:italic;color:var(--acc2);display:block}
+.mast-title .ghost{-webkit-text-stroke:1.5px var(--ink);color:transparent;display:block}
+.mast-sub{font-size:1rem;line-height:1.78;color:var(--muted);max-width:420px;font-weight:300;margin-bottom:2rem}
+.mstat-row{display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1.5px solid var(--line)}
+.mstat{padding:1.1rem 0;border-right:1.5px solid var(--line)}
+.mstat:last-child{border-right:none}
+.mstat-n{font-family:'DM Serif Display',serif;font-size:2rem;line-height:1}
+.mstat-n sup{font-size:.85rem;vertical-align:super}
+.mstat-l{font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:.2rem}
+.masthead-right{position:relative;overflow:hidden;min-height:400px}
+.masthead-right img{width:100%;height:100%;object-fit:cover;filter:contrast(1.08) saturate(.88)}
+.mast-caption{position:absolute;bottom:.8rem;left:.8rem;right:.8rem;font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:rgba(255,255,255,.45)}
+.contents-box{position:absolute;top:1rem;right:1rem;background:rgba(250,248,245,.93);backdrop-filter:blur(6px);border:1.5px solid var(--ink);padding:.9rem 1rem;min-width:190px}
+.cb-title{font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem}
+.cb-item{font-size:.77rem;padding:.22rem 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;color:var(--ink2)}
+.cb-item:last-child{border:none}
+.cb-n{font-family:'Space Mono',monospace;font-size:.6rem;color:var(--muted)}
 
-.ticker{background:var(--ember);padding:.7rem 0;overflow:hidden;display:flex}
-.ticker-track{display:flex;white-space:nowrap;animation:ticker 35s linear infinite}
-.ticker-track span{font-family:'Bebas Neue',sans-serif;font-size:.95rem;letter-spacing:.2em;color:var(--white);padding:0 2rem}
-.ticker-sep{color:rgba(255,255,255,.35)!important}
-@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+/* BAND */
+.band{background:var(--ink);padding:.55rem 0;overflow:hidden;display:flex;border-top:1.5px solid rgba(255,255,255,.06)}
+.band-track{display:flex;white-space:nowrap;animation:marquee 38s linear infinite}
+.band-item{font-family:'Space Mono',monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;padding:0 2rem;color:rgba(255,255,255,.55)}
+.band-item strong{color:#fff}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
-.section-tag{display:inline-flex;align-items:center;gap:.6rem;font-size:.7rem;letter-spacing:.25em;text-transform:uppercase;color:var(--mint);margin-bottom:1.2rem}
-.section-tag::before{content:'';width:24px;height:1px;background:var(--mint)}
-.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
-.reveal.visible{opacity:1;transform:translateY(0)}
+/* SECTION LABEL */
+.slabel{font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:.9rem;display:flex;align-items:center;gap:.6rem}
+.slabel::after{content:'';flex:1;height:1px;background:var(--line);max-width:80px}
 
-#intro{display:grid;grid-template-columns:1fr 1fr;min-height:80vh}
-.intro-visual{position:relative;overflow:hidden;min-height:400px}
-.intro-visual img{width:100%;height:100%;object-fit:cover;filter:saturate(.7) brightness(.75);transition:transform .7s ease,filter .7s}
-.intro-visual:hover img{transform:scale(1.04);filter:saturate(.9) brightness(.85)}
-.intro-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(6,12,15,.45) 0%,transparent 60%)}
-.intro-img-label{position:absolute;bottom:1.5rem;left:1.5rem;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.4)}
-.intro-text{padding:6rem 5rem;display:flex;flex-direction:column;justify-content:center;background:var(--dark)}
-.intro-heading{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,3vw,2.8rem);font-weight:300;line-height:1.2;margin-bottom:1.8rem}
-.intro-heading em{font-style:italic;color:var(--mint)}
-.intro-body{font-size:.95rem;line-height:1.85;color:rgba(255,255,255,.55);font-weight:300;margin-bottom:1.2rem}
-.quote-pull{border-left:2px solid var(--mint);padding:1.2rem 1.5rem;margin:2rem 0;background:rgba(0,180,216,.05)}
-.quote-pull p{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-style:italic;line-height:1.65;color:rgba(255,255,255,.82)}
-.quote-pull cite{display:block;margin-top:.6rem;font-family:'Outfit',sans-serif;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);font-style:normal}
+/* SR = scroll-reveal */
+.sr{opacity:0;transform:translateY(22px);transition:opacity .6s ease,transform .6s ease}
+.sr.in{opacity:1;transform:none}
 
-#causes{padding:8rem 4rem;background:var(--charcoal)}
-.causes-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:4rem;gap:2rem}
-.causes-heading{font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,4.5vw,3.8rem);font-weight:300;line-height:1.1}
-.causes-heading em{font-style:italic;color:var(--mint)}
-.causes-subtext{max-width:300px;font-size:.88rem;line-height:1.75;color:rgba(255,255,255,.4);text-align:right}
-.causes-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.05)}
-.cause-card{background:var(--charcoal);padding:2.5rem;position:relative;overflow:hidden;transition:background .3s}
-.cause-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--mint),transparent);transform:scaleX(0);transform-origin:left;transition:transform .4s ease}
-.cause-card:hover{background:rgba(0,180,216,.04)}
-.cause-card:hover::before{transform:scaleX(1)}
-.cause-img{width:100%;height:155px;object-fit:cover;border-radius:3px;margin-bottom:1.5rem;filter:saturate(.55) brightness(.7);transition:filter .4s}
-.cause-card:hover .cause-img{filter:saturate(.85) brightness(.82)}
-.cause-num{font-family:'Bebas Neue',sans-serif;font-size:3.2rem;color:rgba(0,180,216,.1);line-height:1;margin-bottom:.4rem;transition:color .3s}
-.cause-card:hover .cause-num{color:rgba(0,180,216,.22)}
-.cause-title{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:400;margin-bottom:.6rem}
-.cause-text{font-size:.83rem;line-height:1.78;color:rgba(255,255,255,.48)}
-.cause-badge{display:inline-block;margin-top:1rem;background:rgba(0,180,216,.1);border:1px solid rgba(0,180,216,.22);color:var(--mint);font-size:.66rem;letter-spacing:.1em;padding:.22rem .75rem;border-radius:20px}
+/* INTRO */
+.intro-wrap{border-bottom:1.5px solid var(--ink);display:grid;grid-template-columns:5fr 7fr}
+.intro-text{padding:3.5rem 3rem;border-right:1.5px solid var(--ink)}
+.ih{font-family:'DM Serif Display',serif;font-size:clamp(1.7rem,2.8vw,2.8rem);line-height:1.12;margin-bottom:1.3rem}
+.ih em{font-style:italic;color:var(--acc2)}
+.ip{font-size:.93rem;line-height:1.83;color:var(--ink2);font-weight:300;margin-bottom:.9rem}
+.pullq{margin:1.6rem 0;padding:1.1rem 0 1.1rem 1.3rem;border-left:3px solid var(--acc2)}
+.pullq p{font-family:'DM Serif Display',serif;font-size:1.18rem;font-style:italic;line-height:1.55;color:var(--ink)}
+.pullq cite{font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-style:normal;display:block;margin-top:.4rem}
+.intro-visual{display:flex;flex-direction:column}
+.intro-img{overflow:hidden;flex:1;min-height:350px}
+.intro-img img{width:100%;height:100%;object-fit:cover;filter:saturate(.82) contrast(1.04);transition:transform .7s ease}
+.intro-img:hover img{transform:scale(1.03)}
+.intro-cap{padding:.85rem 1.4rem;border-top:1.5px solid var(--ink);background:var(--bg2);font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:.07em;color:var(--muted)}
 
-#consequences{padding:8rem 0;background:var(--black)}
-.cons-intro{padding:0 4rem 4rem}
-.cons-intro h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,4.5vw,3.8rem);font-weight:300;line-height:1.1;margin-top:.5rem}
-.cons-intro h2 em{font-style:italic;color:var(--mint)}
-.con-row{display:grid;grid-template-columns:1fr 1fr;min-height:440px;border-top:1px solid rgba(255,255,255,.05)}
-.con-row:nth-child(even) .con-img{order:2}
-.con-row:nth-child(even) .con-text{order:1}
-.con-img{position:relative;overflow:hidden}
-.con-img img{width:100%;height:100%;object-fit:cover;filter:saturate(.6) brightness(.72);transition:transform .8s ease,filter .8s}
-.con-row:hover .con-img img{transform:scale(1.05);filter:saturate(.82) brightness(.82)}
-.con-img-num{position:absolute;top:1.5rem;left:1.5rem;font-family:'Bebas Neue',sans-serif;font-size:5rem;line-height:1;color:rgba(255,255,255,.07);pointer-events:none}
-.con-img-badge{position:absolute;bottom:1.5rem;left:1.5rem;background:rgba(0,119,182,.8);backdrop-filter:blur(8px);font-size:.66rem;letter-spacing:.15em;text-transform:uppercase;padding:.35rem .9rem;border-radius:2px}
-.con-text{padding:4rem;display:flex;flex-direction:column;justify-content:center;background:var(--dark)}
-.con-text h3{font-family:'Cormorant Garamond',serif;font-size:clamp(1.7rem,2.8vw,2.3rem);font-weight:400;line-height:1.2;margin-bottom:1.1rem}
-.con-text h3 em{font-style:italic;color:var(--mint)}
-.con-text p{font-size:.9rem;line-height:1.82;color:rgba(255,255,255,.52);margin-bottom:1rem}
-.con-stat-box{display:flex;gap:2rem;margin-top:.5rem;flex-wrap:wrap}
-.con-stat .n{font-family:'Bebas Neue',sans-serif;font-size:1.9rem;color:var(--mint);letter-spacing:.05em}
-.con-stat .l{font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:.1rem}
+/* BENTO CAUSES */
+.section-head{padding:2.5rem 3rem 0}
+.section-head h2{font-family:'DM Serif Display',serif;font-size:clamp(1.9rem,3.2vw,3rem);line-height:1.02;margin-bottom:.25rem}
+.section-head h2 em{font-style:italic;color:var(--acc)}
+.section-head p{font-size:.87rem;color:var(--muted);margin-bottom:1.2rem;font-weight:300;max-width:460px}
+.bento{display:grid;grid-template-columns:repeat(6,1fr);gap:0;border-top:1.5px solid var(--ink)}
+.bc{border-right:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);padding:1.8rem;position:relative;overflow:hidden;transition:background .2s}
+.bc:nth-child(6n){border-right:none}
+.bc.w2{grid-column:span 2}
+.bc.w3{grid-column:span 3}
+.bc.dk{background:var(--ink);color:var(--white)}
+.bc.rd{background:var(--acc2);color:#fff}
+.bc.bl{background:var(--acc);color:#fff}
+.bc.wb{background:var(--warn-bg)}
+.bc.db{background:var(--danger-bg)}
+.bc:not(.dk):not(.rd):not(.bl):hover{background:var(--bg2)}
+.bc-bg-num{font-family:'DM Serif Display',serif;font-size:5rem;line-height:1;opacity:.07;position:absolute;top:.3rem;right:.8rem;pointer-events:none}
+.bc-ico{font-size:1.6rem;margin-bottom:.7rem;display:block}
+.bc h3{font-family:'DM Serif Display',serif;font-size:1.1rem;line-height:1.18;margin-bottom:.45rem}
+.bc p{font-size:.78rem;line-height:1.67;opacity:.68;font-weight:300}
+.bc-badge{display:inline-block;margin-top:.7rem;font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.07em;padding:.16rem .5rem;border-radius:1px}
+.bc:not(.dk):not(.rd):not(.bl) .bc-badge{background:var(--ink);color:#fff}
+.bc.dk .bc-badge,.bc.rd .bc-badge,.bc.bl .bc-badge{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff}
+.bignum{font-family:'DM Serif Display',serif;font-size:2.8rem;font-style:italic;line-height:1;margin-bottom:.4rem}
+.bignum-key{font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.bc.dk .bignum-key,.bc.rd .bignum-key,.bc.bl .bignum-key{color:rgba(255,255,255,.5)}
 
-/* ===== MAP SECTION ===== */
-#river-map{padding:0;background:var(--black);border-top:1px solid rgba(255,255,255,.05)}
-.map-header{padding:5rem 4rem 3rem}
-.map-header h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,4.5vw,3.8rem);font-weight:300;line-height:1.1;margin-top:.5rem}
-.map-header h2 em{font-style:italic;color:var(--mint)}
-.map-header p{font-size:.9rem;line-height:1.8;color:rgba(255,255,255,.45);max-width:640px;margin-top:.8rem}
-.map-container{position:relative;height:620px;background:var(--dark)}
-#leaflet-map{width:100%;height:100%}
-.map-controls{position:absolute;top:1.2rem;left:50%;transform:translateX(-50%);z-index:800;display:flex;gap:.5rem;background:rgba(6,12,15,.88);backdrop-filter:blur(12px);border:1px solid rgba(72,202,228,.12);border-radius:4px;padding:.4rem}
-.map-btn{font-family:'Outfit',sans-serif;font-size:.72rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;padding:.45rem 1.1rem;border-radius:3px;border:none;cursor:pointer;transition:background .2s,color .2s;background:transparent;color:rgba(255,255,255,.5)}
-.map-btn.active{background:var(--ember);color:var(--white)}
-.map-btn:hover:not(.active){background:rgba(255,255,255,.07);color:var(--white)}
-.map-legend{position:absolute;bottom:1.5rem;right:1.5rem;z-index:800;background:rgba(6,12,15,.88);backdrop-filter:blur(12px);border:1px solid rgba(72,202,228,.12);border-radius:4px;padding:1rem 1.2rem;min-width:170px}
-.map-legend h5{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:.8rem}
-.legend-item{display:flex;align-items:center;gap:.6rem;margin-bottom:.5rem;font-size:.78rem;color:rgba(255,255,255,.6)}
-.legend-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
-.map-info-panel{padding:2rem 4rem 3rem;background:var(--dark);display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem}
-.map-info-card{border:1px solid rgba(255,255,255,.06);border-radius:3px;padding:1.4rem;background:rgba(255,255,255,.02)}
-.mic-label{font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:.4rem}
-.mic-val{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.05em;color:var(--mint)}
-.mic-sub{font-size:.78rem;color:rgba(255,255,255,.4);margin-top:.3rem;line-height:1.55}
+/* CONSEQUENCES */
+.cons-header{padding:3rem 3rem 2rem;border-bottom:1.5px solid var(--line)}
+.cons-header h2{font-family:'DM Serif Display',serif;font-size:clamp(1.9rem,3.2vw,3rem);line-height:1.05}
+.cons-header h2 em{font-style:italic;color:var(--acc2)}
+.crows{}
+.crow{display:grid;grid-template-columns:1fr 1fr;border-top:1.5px solid var(--ink);min-height:400px}
+.crow:nth-child(even) .cr-im{order:2}
+.crow:nth-child(even) .cr-tx{order:1;border-left:none;border-right:1.5px solid var(--ink)}
+.cr-im{overflow:hidden;position:relative}
+.cr-im img{width:100%;height:100%;object-fit:cover;filter:saturate(.72);transition:transform .8s,filter .8s}
+.crow:hover .cr-im img{transform:scale(1.04);filter:saturate(1)}
+.cr-badge{position:absolute;top:1.2rem;left:1.2rem;font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;background:var(--acc2);color:#fff;padding:.28rem .65rem}
+.cr-bign{position:absolute;bottom:.8rem;right:1rem;font-family:'DM Serif Display',serif;font-size:5.5rem;line-height:1;color:rgba(255,255,255,.07);pointer-events:none}
+.cr-tx{padding:3rem 2.8rem;display:flex;flex-direction:column;justify-content:center;background:var(--white);border-left:1.5px solid var(--ink)}
+.cr-tx h3{font-family:'DM Serif Display',serif;font-size:clamp(1.45rem,2.3vw,1.95rem);line-height:1.18;margin-bottom:.85rem}
+.cr-tx h3 em{font-style:italic;color:var(--acc2)}
+.cr-tx p{font-size:.87rem;line-height:1.82;color:var(--ink2);margin-bottom:.8rem;font-weight:300}
+.cr-stats{display:flex;gap:2rem;flex-wrap:wrap;margin-top:.8rem;padding-top:.8rem;border-top:1px solid var(--line)}
+.crs .sv{font-family:'DM Serif Display',serif;font-size:1.65rem;color:var(--acc);line-height:1}
+.crs .sl{font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-top:.18rem}
 
-#scenarios{padding:8rem 4rem;background:linear-gradient(180deg,var(--forest) 0%,var(--black) 100%);position:relative;overflow:hidden}
-#scenarios::before{content:'';position:absolute;top:-200px;right:-200px;width:500px;height:500px;background:radial-gradient(circle,rgba(0,150,199,.18) 0%,transparent 70%);pointer-events:none}
-.scenarios-header{text-align:center;margin-bottom:5rem}
-.scenarios-header h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,4.5vw,3.8rem);font-weight:300;margin-top:.5rem}
-.scenarios-header h2 em{font-style:italic;color:var(--mint)}
-.scenarios-header p{font-size:.9rem;color:rgba(255,255,255,.42);max-width:520px;margin:.8rem auto 0;line-height:1.75}
-.scenarios-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem}
-.sc-card{border-radius:4px;overflow:hidden;transition:transform .4s ease}
-.sc-card:hover{transform:translateY(-8px)}
-.sc-img{height:290px;position:relative;overflow:hidden}
-.sc-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
-.sc-card:hover .sc-img img{transform:scale(1.08)}
-.sc-overlay{position:absolute;inset:0}
-.sc-card:nth-child(1) .sc-overlay{background:linear-gradient(to top,rgba(2,62,88,.92) 0%,rgba(2,62,88,.15) 60%)}
-.sc-card:nth-child(2) .sc-overlay{background:linear-gradient(to top,rgba(10,96,112,.92) 0%,rgba(10,96,112,.15) 60%)}
-.sc-card:nth-child(3) .sc-overlay{background:linear-gradient(to top,rgba(180,80,0,.92) 0%,rgba(180,80,0,.15) 60%)}
-.sc-card:nth-child(4) .sc-overlay{background:linear-gradient(to top,rgba(150,20,20,.92) 0%,rgba(150,20,20,.15) 60%)}
-.sc-wqi{position:absolute;top:1.2rem;left:1.5rem;font-family:'Bebas Neue',sans-serif;font-size:3.5rem;line-height:1;color:rgba(255,255,255,.88)}
-.sc-body{padding:1.8rem;background:var(--charcoal)}
-.sc-label{font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;margin-bottom:.5rem;display:block}
-.sc-card:nth-child(1) .sc-label{color:#52b788}
-.sc-card:nth-child(2) .sc-label{color:var(--mint)}
-.sc-card:nth-child(3) .sc-label{color:var(--warn)}
-.sc-card:nth-child(4) .sc-label{color:var(--danger)}
-.sc-title{font-family:'Cormorant Garamond',serif;font-size:1.15rem;margin-bottom:.9rem}
-.sc-list{list-style:none;display:flex;flex-direction:column;gap:.45rem}
-.sc-list li{font-size:.8rem;line-height:1.55;color:rgba(255,255,255,.48);padding-left:1rem;position:relative}
-.sc-list li::before{content:'→';position:absolute;left:0;color:rgba(255,255,255,.18)}
+/* MAP */
+.map-wrap{background:var(--ink);border-bottom:1.5px solid var(--ink)}
+.map-top{display:grid;grid-template-columns:1fr 2.2fr;border-bottom:1.5px solid rgba(255,255,255,.1)}
+.map-side{padding:2.5rem;border-right:1.5px solid rgba(255,255,255,.1)}
+.map-side .slabel{color:rgba(255,255,255,.35)}
+.map-side .slabel::after{background:rgba(255,255,255,.1)}
+.map-side h2{font-family:'DM Serif Display',serif;font-size:clamp(1.5rem,2.3vw,2.3rem);line-height:1.08;color:#fff;margin-bottom:.7rem}
+.map-side h2 em{font-style:italic;color:var(--acc4)}
+.map-side p{font-size:.82rem;line-height:1.72;color:rgba(255,255,255,.45);font-weight:300;margin-bottom:1.3rem}
+.mtabs{display:flex;gap:0;border:1.5px solid rgba(255,255,255,.12);border-radius:2px;overflow:hidden;width:fit-content}
+.mtab{font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.45rem 1rem;background:transparent;border:none;border-right:1.5px solid rgba(255,255,255,.12);color:rgba(255,255,255,.4);cursor:pointer;transition:all .2s}
+.mtab:last-child{border-right:none}
+.mtab.on{background:var(--acc4);color:var(--ink);font-weight:700}
+.mtab:hover:not(.on){background:rgba(255,255,255,.07);color:#fff}
+.map-kpis{display:grid;grid-template-columns:repeat(3,1fr)}
+.mkpi{padding:1.4rem 1.5rem;border-right:1.5px solid rgba(255,255,255,.1)}
+.mkpi:last-child{border-right:none}
+.mkpi-v{font-family:'DM Serif Display',serif;font-size:1.8rem;color:var(--acc4);line-height:1}
+.mkpi-k{font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.32);margin-top:.2rem}
+#map{height:530px;width:100%}
+.map-leg{display:flex;gap:2.5rem;padding:.9rem 2rem;border-top:1.5px solid rgba(255,255,255,.1);flex-wrap:wrap}
+.ml{display:flex;align-items:center;gap:.5rem;font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.4)}
+.mldot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
 
-#impact{padding:8rem 4rem;background:var(--dark)}
-.impact-layout{display:grid;grid-template-columns:1fr 1.5fr;gap:6rem;align-items:center}
-.impact-left h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,3.5vw,3rem);font-weight:300;line-height:1.2;margin-top:.5rem;margin-bottom:1.5rem}
-.impact-left h2 em{font-style:italic;color:var(--mint)}
-.impact-left p{font-size:.9rem;line-height:1.82;color:rgba(255,255,255,.48);margin-bottom:2rem}
-.impact-num-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:1.5rem}
-.impact-num{padding:1.4rem;border:1px solid rgba(255,255,255,.07);border-radius:3px}
-.impact-num .n{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:var(--mint);letter-spacing:.05em}
-.impact-num .l{font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:.2rem}
-.bars{display:flex;flex-direction:column;gap:1.4rem}
-.bar-meta{display:flex;justify-content:space-between;margin-bottom:.45rem}
-.bar-name{font-size:.85rem;color:rgba(255,255,255,.65)}
-.bar-val{font-family:'Bebas Neue',sans-serif;font-size:.9rem;color:var(--mint);letter-spacing:.08em}
-.bar-track{height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden}
-.bar-fill{height:100%;border-radius:3px;width:0;transition:width 1.4s cubic-bezier(.4,0,.2,1)}
-.bar-fill.blue{background:linear-gradient(90deg,var(--ember),var(--mint))}
-.bar-fill.warn{background:linear-gradient(90deg,var(--warn),#f7c59f)}
-.bar-fill.red{background:linear-gradient(90deg,var(--danger),#ff6b6b)}
+/* DATA */
+.data-grid{display:grid;grid-template-columns:1fr 1fr;border-bottom:1.5px solid var(--ink)}
+.dc{padding:3rem;border-right:1.5px solid var(--ink)}
+.dc:last-child{border-right:none}
+.dc h2{font-family:'DM Serif Display',serif;font-size:1.8rem;margin-bottom:.25rem}
+.dc h2 em{font-style:italic;color:var(--acc)}
+.dc .dsub{font-size:.82rem;color:var(--muted);margin-bottom:1.8rem;font-weight:300}
+.numg{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);margin-top:1.5rem}
+.ngc{background:var(--bg);padding:1.1rem}
+.ngv{font-family:'DM Serif Display',serif;font-size:1.9rem;color:var(--ink);line-height:1}
+.ngk{font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:.2rem}
+.bar-list{display:flex;flex-direction:column;gap:1.1rem}
+.blr{}
+.blr-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.32rem}
+.blr-lbl{font-size:.82rem;color:var(--ink2)}
+.blr-pct{font-family:'Space Mono',monospace;font-size:.7rem;color:var(--muted)}
+.btr{height:5px;background:var(--line)}
+.bfill{height:100%;width:0;transition:width 1.3s cubic-bezier(.4,0,.2,1)}
+.bf-r{background:var(--acc2)}.bf-b{background:var(--acc)}.bf-g{background:var(--acc3)}.bf-w{background:var(--acc4)}
 
-#india-focus{background:var(--black)}
-.india-title-block{padding:6rem 4rem 4rem}
-.india-title-block h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,4.5vw,3.8rem);font-weight:300;line-height:1.1;margin-top:.5rem}
-.india-title-block h2 em{font-style:italic;color:var(--mint)}
-.regions-mosaic{display:grid;grid-template-columns:1.5fr 1fr 1fr;grid-template-rows:300px 300px;gap:2px}
-.region-card{position:relative;overflow:hidden}
-.region-card.tall{grid-row:span 2}
-.region-card img{width:100%;height:100%;object-fit:cover;filter:saturate(.45) brightness(.6);transition:transform .7s,filter .7s}
-.region-card:hover img{transform:scale(1.07);filter:saturate(.75) brightness(.75)}
-.region-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.88) 0%,transparent 55%)}
-.region-content{position:absolute;bottom:1.8rem;left:1.8rem;right:1.8rem}
-.region-badge{display:inline-block;margin-bottom:.6rem;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;padding:.22rem .65rem;border-radius:20px;border:1px solid}
-.region-card:nth-child(1) .region-badge{color:var(--danger);border-color:rgba(230,57,70,.35)}
-.region-card:nth-child(2) .region-badge{color:var(--warn);border-color:rgba(244,162,97,.35)}
-.region-card:nth-child(3) .region-badge{color:var(--mint);border-color:rgba(72,202,228,.35)}
-.region-card:nth-child(4) .region-badge{color:#52b788;border-color:rgba(82,183,136,.35)}
-.region-content h3{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:400;margin-bottom:.35rem}
-.region-content p{font-size:.8rem;line-height:1.62;color:rgba(255,255,255,.52)}
+/* INDIA */
+.india-head{padding:3rem 3rem 0;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem;border-bottom:1.5px solid var(--line)}
+.india-head h2{font-family:'DM Serif Display',serif;font-size:clamp(1.9rem,3.2vw,3rem);line-height:1.05}
+.india-head h2 em{font-style:italic;color:var(--acc2)}
+.india-head .aside{font-size:.87rem;color:var(--muted);max-width:340px;font-weight:300;margin-bottom:1.5rem}
+.mosaic{display:grid;grid-template-columns:2fr 1.2fr 1.2fr;grid-template-rows:260px 260px;gap:0;border-bottom:1.5px solid var(--ink)}
+.mc{position:relative;overflow:hidden;border-right:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink)}
+.mc.tall{grid-row:span 2}
+.mc img{width:100%;height:100%;object-fit:cover;filter:saturate(.48) brightness(.68);transition:transform .7s,filter .7s}
+.mc:hover img{transform:scale(1.06);filter:saturate(.82) brightness(.8)}
+.mc-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.88) 0%,transparent 60%)}
+.mc-body{position:absolute;bottom:0;left:0;right:0;padding:1.4rem}
+.mctag{font-family:'Space Mono',monospace;font-size:.56rem;letter-spacing:.12em;text-transform:uppercase;display:inline-block;padding:.18rem .5rem;border-radius:1px;margin-bottom:.4rem;color:#fff}
+.t-crit{background:var(--acc2)}.t-tox{background:#5a0000}.t-sev{background:#a06000}.t-mod{background:#005a3a}
+.mc-body h3{font-family:'DM Serif Display',serif;font-size:1.25rem;color:#fff;line-height:1.15;margin-bottom:.28rem}
+.mc-body p{font-size:.74rem;color:rgba(255,255,255,.55);line-height:1.52;font-weight:300}
 
-#timeline{padding:8rem 4rem;background:var(--charcoal)}
-#timeline h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,4.5vw,3.8rem);font-weight:300;line-height:1.1;margin-top:.5rem;margin-bottom:4rem}
-#timeline h2 em{font-style:italic;color:var(--mint)}
-.timeline{position:relative;max-width:860px}
-.timeline::before{content:'';position:absolute;left:128px;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,var(--mint) 8%,var(--ember) 92%,transparent)}
-.tl-item{display:grid;grid-template-columns:110px 46px 1fr;align-items:start;margin-bottom:3.2rem}
-.tl-year{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:.1em;color:rgba(255,255,255,.28);padding-top:4px;text-align:right}
-.tl-dot-wrap{display:flex;justify-content:center;padding-top:8px}
-.tl-dot{width:12px;height:12px;border-radius:50%;background:var(--ash);border:2px solid var(--charcoal);transition:background .3s}
-.tl-dot.hot{background:var(--danger)}
-.tl-dot.warn{background:var(--warn)}
-.tl-item:hover .tl-dot{background:var(--mint)}
-.tl-body h3{font-family:'Cormorant Garamond',serif;font-size:1.22rem;font-weight:400;margin-bottom:.35rem}
-.tl-body p{font-size:.87rem;line-height:1.78;color:rgba(255,255,255,.42);max-width:520px}
+/* TIMELINE */
+.tl-wrap{background:var(--bg2);border-bottom:1.5px solid var(--ink)}
+.tl-head{padding:3rem 3rem 1.5rem}
+.tl-head h2{font-family:'DM Serif Display',serif;font-size:clamp(1.9rem,3.2vw,3rem);line-height:1.05}
+.tl-head h2 em{font-style:italic;color:var(--acc)}
+.tl-head p{font-size:.87rem;color:var(--muted);font-weight:300}
+.tl-grid{display:grid;grid-template-columns:repeat(4,1fr);border-top:1.5px solid var(--ink)}
+.tlc{padding:1.8rem;border-right:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);position:relative;overflow:hidden}
+.tlc:nth-child(4n){border-right:none}
+.tlc-year{font-family:'DM Serif Display',serif;font-size:2.8rem;line-height:1;color:var(--line);margin-bottom:.7rem}
+.tlc.hot .tlc-year{color:var(--acc2)}.tlc.warn .tlc-year{color:var(--acc4)}
+.tlc-dot{position:absolute;top:1.2rem;right:1.2rem;width:7px;height:7px;border-radius:50%;background:var(--line)}
+.tlc.hot .tlc-dot{background:var(--acc2)}.tlc.warn .tlc-dot{background:var(--acc4)}
+.tlc h3{font-family:'DM Serif Display',serif;font-size:.98rem;margin-bottom:.4rem;line-height:1.28}
+.tlc p{font-size:.76rem;line-height:1.63;color:var(--muted);font-weight:300}
 
-#solutions{padding:8rem 4rem;background:var(--forest);position:relative;overflow:hidden}
-#solutions::after{content:'';position:absolute;bottom:-120px;left:-120px;width:350px;height:350px;background:radial-gradient(circle,rgba(0,150,199,.25) 0%,transparent 70%);pointer-events:none}
-.solutions-header{display:grid;grid-template-columns:1fr 1fr;gap:4rem;margin-bottom:4rem;align-items:end}
-.solutions-header h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,4.5vw,3.8rem);font-weight:300;line-height:1.1;margin-top:.5rem}
-.solutions-header h2 em{font-style:italic;color:var(--mint)}
-.solutions-header p{font-size:.9rem;line-height:1.8;color:rgba(255,255,255,.5)}
-.solutions-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
-.sol-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:4px;overflow:hidden;transition:transform .3s,background .3s}
-.sol-card:hover{transform:translateY(-6px);background:rgba(255,255,255,.08)}
-.sol-img{height:175px;overflow:hidden;position:relative}
-.sol-img img{width:100%;height:100%;object-fit:cover;filter:saturate(.5) brightness(.62);transition:filter .4s,transform .4s}
-.sol-card:hover .sol-img img{filter:saturate(.8) brightness(.78);transform:scale(1.06)}
-.sol-body{padding:1.8rem}
-.sol-num{font-family:'Bebas Neue',sans-serif;font-size:.88rem;letter-spacing:.15em;color:var(--mint);margin-bottom:.5rem;display:block}
-.sol-body h3{font-family:'Cormorant Garamond',serif;font-size:1.18rem;font-weight:400;margin-bottom:.6rem}
-.sol-body p{font-size:.82rem;line-height:1.78;color:rgba(255,255,255,.48)}
+/* SOLUTIONS */
+.sol-head{padding:3rem 3rem 0}
+.sol-head h2{font-family:'DM Serif Display',serif;font-size:clamp(1.9rem,3.2vw,3rem);line-height:1.05}
+.sol-head h2 em{font-style:italic;color:var(--acc3)}
+.sol-head p{font-size:.87rem;color:var(--muted);max-width:500px;font-weight:300;margin-bottom:1.8rem}
+.sol-grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1.5px solid var(--ink)}
+.sc{padding:2rem;border-right:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);position:relative;transition:background .2s;overflow:hidden}
+.sc:nth-child(3n){border-right:none}
+.sc:hover{background:var(--bg2)}
+.sc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--acc3);transform:scaleX(0);transform-origin:left;transition:transform .3s}
+.sc:hover::after{transform:scaleX(1)}
+.sc-img{width:100%;height:110px;object-fit:cover;border-radius:1px;margin-bottom:1rem;filter:saturate(.55) brightness(.85);transition:filter .4s}
+.sc:hover .sc-img{filter:saturate(.9) brightness(.92)}
+.sc-n{font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--acc3);margin-bottom:.35rem}
+.sc h3{font-family:'DM Serif Display',serif;font-size:1rem;margin-bottom:.45rem;line-height:1.22}
+.sc p{font-size:.77rem;line-height:1.68;color:var(--muted);font-weight:300}
 
-#cta{position:relative;min-height:58vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.cta-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1559825481-12a05cc00344?w=1600&q=80') center/cover;filter:saturate(.35) brightness(.28)}
-.cta-overlay{position:absolute;inset:0;background:rgba(6,12,15,.55)}
-.cta-inner{position:relative;z-index:2;text-align:center;padding:4rem 2rem}
-.cta-inner h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:300;line-height:1.1;margin-bottom:1rem}
-.cta-inner h2 em{font-style:italic;color:var(--mint)}
-.cta-inner p{font-size:.97rem;color:rgba(255,255,255,.52);max-width:520px;margin:0 auto 2.5rem;line-height:1.78}
-.cta-buttons{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
-.btn-primary{background:var(--ember);color:var(--white);font-weight:600;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;padding:.9rem 2.2rem;border-radius:2px;transition:background .2s,transform .2s}
-.btn-primary:hover{background:var(--wave);transform:translateY(-2px)}
-.btn-outline{border:1px solid rgba(255,255,255,.28);color:var(--white);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;padding:.9rem 2.2rem;border-radius:2px;transition:border-color .2s,transform .2s}
-.btn-outline:hover{border-color:var(--white);transform:translateY(-2px)}
+/* CTA */
+.cta-band{background:var(--acc2);padding:5rem 3rem;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;border-bottom:1.5px solid var(--ink)}
+.cta-band h2{font-family:'DM Serif Display',serif;font-size:clamp(2.4rem,5vw,4.5rem);color:#fff;line-height:.93}
+.cta-band h2 em{font-style:italic;color:rgba(255,255,255,.55)}
+.cta-r p{font-size:.93rem;color:rgba(255,255,255,.68);line-height:1.75;font-weight:300;margin-bottom:1.7rem}
+.cta-btns{display:flex;gap:.9rem;flex-wrap:wrap}
+.btn-w{background:#fff;color:var(--acc2);font-family:'Space Mono',monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;padding:.78rem 1.7rem;border-radius:1px;transition:opacity .15s,transform .15s;font-weight:700}
+.btn-w:hover{opacity:.88;transform:translateY(-2px)}
+.btn-o{border:1.5px solid rgba(255,255,255,.4);color:#fff;font-family:'Space Mono',monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;padding:.78rem 1.7rem;border-radius:1px;transition:border-color .15s,transform .15s}
+.btn-o:hover{border-color:#fff;transform:translateY(-2px)}
 
-footer{background:var(--black);border-top:1px solid rgba(255,255,255,.05);padding:4rem}
-.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:4rem;margin-bottom:3.5rem}
-.footer-brand .logo{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.15em;margin-bottom:1rem}
-.footer-brand .logo span{color:var(--mint)}
-.footer-brand p{font-size:.83rem;line-height:1.72;color:rgba(255,255,255,.3);max-width:290px}
-.footer-col h4{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mint);margin-bottom:1.1rem}
-.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:.55rem}
-.footer-col ul a{font-size:.83rem;color:rgba(255,255,255,.38);transition:color .2s}
-.footer-col ul a:hover{color:var(--white)}
-.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:2rem;border-top:1px solid rgba(255,255,255,.05)}
-.footer-bottom p{font-size:.75rem;color:rgba(255,255,255,.22)}
-.footer-bottom .sources{font-size:.7rem;color:rgba(255,255,255,.18);max-width:380px;text-align:right;line-height:1.55}
+/* FOOTER */
+footer{background:var(--ink);color:var(--white);padding:3rem}
+.fg{display:grid;grid-template-columns:2fr 1fr 1fr;gap:3rem;margin-bottom:2rem;border-bottom:1px solid rgba(255,255,255,.1);padding-bottom:2rem}
+.fb-brand{font-family:'DM Serif Display',serif;font-size:1.9rem;letter-spacing:-.02em;margin-bottom:.7rem}
+.fb-brand em{font-style:italic;color:var(--acc2)}
+.fb-desc{font-size:.78rem;color:rgba(255,255,255,.3);line-height:1.68;max-width:250px;font-weight:300}
+.fc h4{font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:.9rem}
+.fc ul{list-style:none;display:flex;flex-direction:column;gap:.42rem}
+.fc a{font-size:.78rem;color:rgba(255,255,255,.38);transition:color .15s}
+.fc a:hover{color:#fff}
+.fb{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.8rem}
+.fb p{font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.07em;color:rgba(255,255,255,.2)}
 
-/* Leaflet custom styles */
-.leaflet-container{background:#060c0f!important}
-.leaflet-tile{filter:brightness(.7) saturate(.5) hue-rotate(180deg)!important}
-.river-popup .leaflet-popup-content-wrapper{background:rgba(6,12,15,.95);border:1px solid rgba(72,202,228,.2);border-radius:4px;color:var(--white);box-shadow:0 8px 32px rgba(0,0,0,.6)}
-.river-popup .leaflet-popup-tip{background:rgba(6,12,15,.95)}
-.popup-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;margin-bottom:.3rem;font-weight:400}
-.popup-location{font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:.8rem}
-.popup-row{display:flex;justify-content:space-between;gap:1.5rem;margin-top:.5rem}
-.popup-stat .pv{font-family:'Bebas Neue',sans-serif;font-size:1.35rem;letter-spacing:.05em}
-.popup-stat .pl{font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.35)}
-.popup-status{display:inline-block;margin-top:.7rem;font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;padding:.25rem .7rem;border-radius:20px;border:1px solid}
-.status-critical{color:#e63946;border-color:rgba(230,57,70,.4);background:rgba(230,57,70,.08)}
-.status-severe{color:#f4a261;border-color:rgba(244,162,97,.4);background:rgba(244,162,97,.08)}
-.status-moderate{color:#90e0ef;border-color:rgba(144,224,239,.4);background:rgba(144,224,239,.08)}
-.status-clean{color:#52b788;border-color:rgba(82,183,136,.4);background:rgba(82,183,136,.08)}
+/* LEAFLET */
+.leaflet-container{background:#0a1218!important}
+.leaflet-tile{filter:brightness(.48) saturate(.35) hue-rotate(195deg) contrast(1.1)!important}
+.wp .leaflet-popup-content-wrapper{background:rgba(10,12,8,.97);border:1.5px solid rgba(255,255,255,.1);border-radius:2px;color:#fff;box-shadow:0 16px 48px rgba(0,0,0,.8);padding:0}
+.wp .leaflet-popup-content{margin:0;padding:0;width:auto!important}
+.wp .leaflet-popup-tip{background:rgba(10,12,8,.97)}
+.wp .leaflet-popup-close-button{color:rgba(255,255,255,.35)!important;top:8px!important;right:9px!important}
+.pi{padding:1.1rem 1.2rem 1rem}
+.pi-top{display:flex;justify-content:space-between;align-items:flex-start;gap:.8rem;margin-bottom:.5rem}
+.pi-name{font-family:'DM Serif Display',serif;font-size:1.02rem;color:#fff;line-height:1.18}
+.pi-loc{font-family:'Space Mono',monospace;font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.32);margin-top:.18rem}
+.pi-st{font-family:'Space Mono',monospace;font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;padding:.18rem .5rem;border-radius:1px;white-space:nowrap;margin-top:.08rem}
+.st-c{background:rgba(232,56,13,.2);color:#ff7060;border:1px solid rgba(232,56,13,.3)}
+.st-s{background:rgba(200,120,0,.18);color:#f0b050;border:1px solid rgba(200,120,0,.3)}
+.st-m{background:rgba(26,79,255,.18);color:#6090ff;border:1px solid rgba(26,79,255,.3)}
+.st-o{background:rgba(10,171,110,.18);color:#50d898;border:1px solid rgba(10,171,110,.3)}
+.pi-desc{font-size:.75rem;line-height:1.56;color:rgba(255,255,255,.48);margin-bottom:.8rem;font-weight:300}
+.pi-data{display:grid;grid-template-columns:1fr 1fr;gap:.4rem;border-top:1px solid rgba(255,255,255,.08);padding-top:.7rem}
+.pid-v{font-family:'DM Serif Display',serif;font-size:1.25rem;color:#fff;line-height:1}
+.pid-k{font-family:'Space Mono',monospace;font-size:.56rem;letter-spacing:.07em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-top:.12rem}
+.pi-threat{font-size:.72rem;color:rgba(255,255,255,.38);border-top:1px solid rgba(255,255,255,.08);padding-top:.65rem;margin-top:.1rem;line-height:1.5}
+.pi-threat strong{color:rgba(255,255,255,.6)}
 
+/* RESPONSIVE */
 @media(max-width:1100px){
-  nav{padding:1.2rem 2rem}nav.scrolled{padding:.9rem 2rem}
-  .hero-content{padding:0 2.5rem 4rem}
-  .hero-bottom{flex-direction:column;align-items:flex-start;gap:2rem}
-  #intro{grid-template-columns:1fr}
-  .intro-visual{height:55vw}
-  .intro-text{padding:4rem 2.5rem}
-  #causes{padding:5rem 2rem}.causes-grid{grid-template-columns:1fr 1fr}.causes-header{flex-direction:column;align-items:flex-start}.causes-subtext{text-align:left}
-  .con-row{grid-template-columns:1fr}.con-row:nth-child(even) .con-img,.con-row:nth-child(even) .con-text{order:0}.con-img{height:55vw}.con-text{padding:3rem 2.5rem}
-  #scenarios{padding:5rem 2rem}.scenarios-grid{grid-template-columns:1fr 1fr}
-  #impact{padding:5rem 2rem}.impact-layout{grid-template-columns:1fr;gap:3rem}
-  .regions-mosaic{grid-template-columns:1fr 1fr;grid-template-rows:auto}.region-card.tall{grid-row:auto}.region-card{min-height:280px}
-  #timeline{padding:5rem 2rem}.timeline::before{left:95px}.tl-item{grid-template-columns:76px 40px 1fr}
-  #solutions{padding:5rem 2rem}.solutions-header{grid-template-columns:1fr}.solutions-grid{grid-template-columns:1fr 1fr}
-  footer{padding:3rem 2rem}.footer-grid{grid-template-columns:1fr 1fr;gap:2.5rem}
-  .map-info-panel{grid-template-columns:1fr 1fr}
-  .map-header{padding:4rem 2rem 2rem}
+  .masthead{grid-template-columns:1fr}
+  .masthead-right{height:55vw}
+  .intro-wrap{grid-template-columns:1fr}
+  .intro-text{border-right:none;border-bottom:1.5px solid var(--ink)}
+  .bento{grid-template-columns:repeat(3,1fr)}
+  .bc.w2,.bc.w3{grid-column:span 1}
+  .data-grid{grid-template-columns:1fr}
+  .dc:first-child{border-right:none;border-bottom:1.5px solid var(--ink)}
+  .mosaic{grid-template-columns:1fr 1fr;grid-template-rows:auto}
+  .mc.tall{grid-row:auto}
+  .mc{min-height:260px}
+  .tl-grid{grid-template-columns:1fr 1fr}
+  .tlc:nth-child(4n){border-right:1.5px solid var(--ink)}
+  .tlc:nth-child(2n){border-right:none}
+  .sol-grid{grid-template-columns:1fr 1fr}
+  .sc:nth-child(3n){border-right:1.5px solid var(--ink)}
+  .sc:nth-child(2n){border-right:none}
+  .cta-band{grid-template-columns:1fr;padding:3rem 2rem}
+  .fg{grid-template-columns:1fr 1fr}
+  .map-top{grid-template-columns:1fr}
+  .map-side{border-right:none;border-bottom:1.5px solid rgba(255,255,255,.1)}
+  .map-kpis{grid-template-columns:repeat(3,1fr)}
 }
-@media(max-width:640px){
-  .nav-links{display:none}
-  .hero-stats-row{flex-wrap:wrap;gap:1.5rem}
-  .causes-grid{grid-template-columns:1fr}
-  .scenarios-grid{grid-template-columns:1fr}
-  .impact-num-grid{grid-template-columns:1fr 1fr}
-  .regions-mosaic{grid-template-columns:1fr;grid-template-rows:auto}
-  .solutions-grid{grid-template-columns:1fr}
-  .timeline::before{display:none}.tl-item{grid-template-columns:65px 1fr}.tl-dot-wrap{display:none}
-  footer{padding:2rem 1.5rem}.footer-grid{grid-template-columns:1fr}
-  .footer-bottom{flex-direction:column;gap:.8rem;text-align:center}.footer-bottom .sources{text-align:center}
-  #causes,#impact,#scenarios,#timeline,#solutions{padding:4rem 1.5rem}
-  .cons-intro,.india-title-block{padding:0 1.5rem 3rem}
-  .map-info-panel{grid-template-columns:1fr 1fr;padding:1.5rem}
-  .map-controls{flex-wrap:wrap;left:1rem;right:1rem;transform:none}
+@media(max-width:680px){
+  .masthead-left{padding:2rem 1.5rem}
+  .bento{grid-template-columns:1fr 1fr}
+  .crow{grid-template-columns:1fr}
+  .cr-im{height:55vw}
+  .cr-tx{padding:2rem 1.5rem;border:none}
+  .crow:nth-child(even) .cr-tx{border:none}
+  .mosaic{grid-template-columns:1fr}
+  .tl-grid{grid-template-columns:1fr 1fr}
+  .sol-grid{grid-template-columns:1fr}
+  .sc:nth-child(n){border-right:none}
+  footer{padding:2rem 1.5rem}
+  .fg{grid-template-columns:1fr;gap:2rem}
+  .fb{flex-direction:column;align-items:flex-start}
+  .map-kpis{grid-template-columns:1fr 1fr}
 }
 </style>
 </head>
 <body>
+<div id="rbar"></div>
 
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
-<div id="progress"></div>
-
-<!-- NAV -->
-<nav id="navbar">
-  <a href="#" class="nav-logo">AQU<span>A</span></a>
+<header>
+  <div class="nav-issue">Water Crisis · 2026</div>
+  <div class="nav-brand">Hydr<em>a</em></div>
   <ul class="nav-links">
     <li><a href="#intro">Overview</a></li>
     <li><a href="#causes">Sources</a></li>
-    <li><a href="#consequences">Consequences</a></li>
-    <li><a href="#river-map">River Map</a></li>
+    <li><a href="#mapwrap">River Map</a></li>
+    <li><a href="#india">India</a></li>
     <li><a href="#solutions">Solutions</a></li>
-    <li><a href="#cta" class="nav-cta">Take Action</a></li>
+    <li class="nav-cta-li"><a href="#cta">Act Now</a></li>
   </ul>
-</nav>
+</header>
 
-<!-- HERO -->
-<section id="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-overlay"></div>
-  <div class="hero-side">Water Pollution Crisis Report · 2026 Edition</div>
-  <div class="hero-content">
-    <div class="hero-eyebrow">
-      <div class="eyebrow-line"></div>
-      <span>The Invisible Crisis Beneath the Surface</span>
-    </div>
-    <h1 class="hero-title">
-      Water<br>
-      <em>Pollution</em> &amp;<br>
-      <span class="outline">Its Consequences</span>
-    </h1>
-    <div class="hero-bottom">
-      <p class="hero-desc">Over 80% of the world's wastewater flows untreated back into rivers, lakes, and oceans. Billions lack access to safe water. This is not a distant threat — it is a daily reality that kills more people annually than all wars combined.</p>
-      <div class="hero-stats-row">
-        <div class="h-stat"><span class="num">2<span>B+</span></span><span class="lbl">No Safe Drinking Water</span></div>
-        <div class="h-stat"><span class="num">3.5<span>M</span></span><span class="lbl">Deaths Per Year</span></div>
-        <div class="h-stat"><span class="num">80<span>%</span></span><span class="lbl">Wastewater Untreated</span></div>
+<!-- MASTHEAD -->
+<section class="masthead">
+  <div class="masthead-left">
+    <div>
+      <div class="eyebrow-row">
+        <span class="chip">Global Emergency</span>
+        <span class="eyebrow-date">April 2026</span>
       </div>
+      <h1 class="mast-title">
+        Water<br>
+        <em>Pollution</em>
+        <span class="ghost">&amp; Its</span>
+      </h1>
+      <div style="font-family:'DM Serif Display',serif;font-size:clamp(2.4rem,5.5vw,6.5rem);line-height:.9;letter-spacing:-.03em;-webkit-text-stroke:1.5px var(--ink);color:transparent;margin-bottom:1.3rem">Consequences</div>
+      <p class="mast-sub">Over 80% of the world's wastewater returns untreated to rivers and oceans. Billions lack safe water. This kills more people each year than all wars combined — and accelerates.</p>
+    </div>
+    <div class="mstat-row">
+      <div class="mstat" style="padding-right:1.2rem"><div class="mstat-n">2B<sup>+</sup></div><div class="mstat-l">No Safe Drinking Water</div></div>
+      <div class="mstat" style="padding:1.1rem 1.2rem"><div class="mstat-n">3.5M</div><div class="mstat-l">Deaths Per Year</div></div>
+      <div class="mstat" style="padding:1.1rem 1.2rem"><div class="mstat-n">80%</div><div class="mstat-l">Wastewater Untreated</div></div>
     </div>
   </div>
-  <div class="scroll-hint"><span>Scroll to explore</span><div class="scroll-arrow"></div></div>
+  <div class="masthead-right">
+    <img src="https://images.unsplash.com/photo-1621451537084-482c73073a0f?w=1200&q=90" alt="Heavily polluted river with industrial foam"/>
+    <div class="mast-caption">Industrial discharge foam · Yamuna River, Delhi, India</div>
+    <div class="contents-box">
+      <div class="cb-title">In This Report</div>
+      <div class="cb-item">The Crisis <span class="cb-n">01</span></div>
+      <div class="cb-item">Pollution Sources <span class="cb-n">02</span></div>
+      <div class="cb-item">River Map <span class="cb-n">03</span></div>
+      <div class="cb-item">India Deep-Dive <span class="cb-n">04</span></div>
+      <div class="cb-item">Solutions <span class="cb-n">05</span></div>
+    </div>
+  </div>
 </section>
 
-<!-- TICKER -->
-<div class="ticker" aria-hidden="true">
-  <div class="ticker-track">
-    <span>Ganga Declared Critically Polluted in 2024</span><span class="ticker-sep">·</span>
-    <span>1 Child Dies Every 2 Minutes from Unsafe Water</span><span class="ticker-sep">·</span>
-    <span>40% of India's Rivers Polluted Beyond Safe Limits</span><span class="ticker-sep">·</span>
-    <span>Plastic Enters Oceans at 11 Million Tonnes Per Year</span><span class="ticker-sep">·</span>
-    <span>70% of Industrial Waste Dumped Untreated in India</span><span class="ticker-sep">·</span>
-    <span>Over 500 "Dead Zones" in Global Oceans</span><span class="ticker-sep">·</span>
-    <span>Ganga Declared Critically Polluted in 2024</span><span class="ticker-sep">·</span>
-    <span>1 Child Dies Every 2 Minutes from Unsafe Water</span><span class="ticker-sep">·</span>
-    <span>40% of India's Rivers Polluted Beyond Safe Limits</span><span class="ticker-sep">·</span>
-    <span>Plastic Enters Oceans at 11 Million Tonnes Per Year</span><span class="ticker-sep">·</span>
-    <span>70% of Industrial Waste Dumped Untreated in India</span><span class="ticker-sep">·</span>
-    <span>Over 500 "Dead Zones" in Global Oceans</span><span class="ticker-sep">·</span>
+<!-- BAND -->
+<div class="band">
+  <div class="band-track">
+    <span class="band-item"><strong>351</strong> Polluted River Stretches in India</span>
+    <span class="band-item">·</span>
+    <span class="band-item">1 Child Dies Every <strong>2 Minutes</strong> from Contaminated Water</span>
+    <span class="band-item">·</span>
+    <span class="band-item"><strong>40%</strong> of India's Rivers Exceed Safe Limits</span>
+    <span class="band-item">·</span>
+    <span class="band-item">Plastic Enters Oceans at <strong>11M Tonnes</strong>/Year</span>
+    <span class="band-item">·</span>
+    <span class="band-item"><strong>500+</strong> Ocean Dead Zones Documented Globally</span>
+    <span class="band-item">·</span>
+    <span class="band-item">Yamuna BOD Exceeds Safe Limits by <strong>45×</strong></span>
+    <span class="band-item">·</span>
+    <span class="band-item"><strong>351</strong> Polluted River Stretches in India</span>
+    <span class="band-item">·</span>
+    <span class="band-item">1 Child Dies Every <strong>2 Minutes</strong> from Contaminated Water</span>
+    <span class="band-item">·</span>
+    <span class="band-item"><strong>40%</strong> of India's Rivers Exceed Safe Limits</span>
+    <span class="band-item">·</span>
+    <span class="band-item">Plastic Enters Oceans at <strong>11M Tonnes</strong>/Year</span>
+    <span class="band-item">·</span>
+    <span class="band-item"><strong>500+</strong> Ocean Dead Zones Documented Globally</span>
+    <span class="band-item">·</span>
+    <span class="band-item">Yamuna BOD Exceeds Safe Limits by <strong>45×</strong></span>
+    <span class="band-item">·</span>
   </div>
 </div>
 
 <!-- INTRO -->
-<section id="intro">
-  <div class="intro-visual reveal">
-    <img src="https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?w=900&q=85" alt="Polluted river with industrial waste" loading="lazy"/>
-    <div class="intro-overlay"></div>
-    <span class="intro-img-label">Industrial Discharge · Yamuna River, Delhi</span>
-  </div>
-  <div class="intro-text">
-    <p class="section-tag reveal">What Is Happening</p>
-    <h2 class="intro-heading reveal">The World's Water Is Being <em>Poisoned</em> — Silently</h2>
-    <p class="intro-body reveal">Water pollution occurs when harmful substances — chemicals, waste, plastics, pathogens — contaminate water bodies to the point where they become hazardous to humans, wildlife, and ecosystems. It is one of the world's most pervasive and deadly environmental crises, yet remains largely invisible to those not directly affected.</p>
-    <p class="intro-body reveal">India is home to some of the world's most polluted rivers. The Central Pollution Control Board has identified over 350 polluted river stretches across the country. The Ganga alone carries the waste of over 500 million people — yet remains a lifeline for drinking, agriculture, and spiritual life.</p>
-    <div class="quote-pull reveal">
-      <p>"Water and sanitation are at the very core of sustainable development, critical to the survival of people and the planet."</p>
-      <cite>— Ban Ki-moon, Former UN Secretary-General</cite>
+<section id="intro" style="border-bottom:1.5px solid var(--ink)">
+  <div class="intro-wrap">
+    <div class="intro-text">
+      <div class="slabel">01 — Overview</div>
+      <h2 class="ih sr">The World's Water Is Being <em>Poisoned</em>, Silently</h2>
+      <p class="ip sr">Water pollution occurs when harmful substances — chemicals, waste, plastics, pathogens — contaminate water bodies beyond their natural capacity to recover. It is one of humanity's most pervasive crises, yet remains invisible to those not living with its consequences daily.</p>
+      <p class="ip sr">India hosts some of the world's most polluted rivers. The Central Pollution Control Board has identified over 351 polluted river stretches across the country. The Ganga alone serves 500 million people — yet receives untreated sewage from 118 towns and hundreds of industries along its banks.</p>
+      <div class="pullq sr">
+        <p>"Water and sanitation are at the very core of sustainable development — critical to the survival of people and the planet."</p>
+        <cite>— Ban Ki-moon, Former UN Secretary-General</cite>
+      </div>
+      <p class="ip sr">Contaminated water causes more deaths annually than war and all violence combined. Every two minutes, a child under five dies from a waterborne disease. The science is unambiguous; what is needed is political will and sustained, urgent action.</p>
     </div>
-    <p class="intro-body reveal">Globally, contaminated water causes more deaths annually than war, terrorism, and all other forms of violence combined. Every minute, a child under five dies from a water-related disease. The science is clear; what is needed is political will and urgent action.</p>
+    <div class="intro-visual">
+      <div class="intro-img sr">
+        <img src="https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?w=900&q=85" alt="Polluted water body with industrial waste"/>
+      </div>
+      <div class="intro-cap">Toxic industrial foam — direct result of phosphate detergents and untreated sewage discharge, India</div>
+    </div>
   </div>
 </section>
 
-<!-- CAUSES -->
-<section id="causes">
-  <div class="causes-header">
-    <div>
-      <p class="section-tag reveal">Sources of Contamination</p>
-      <h2 class="causes-heading reveal">What Is <em>Poisoning</em><br>Our Water?</h2>
-    </div>
-    <p class="causes-subtext reveal">Water bodies worldwide are under siege from multiple simultaneous pollution sources — industrial, agricultural, domestic, and plastic — creating a compound crisis with no single fix.</p>
+<!-- CAUSES BENTO -->
+<section id="causes" style="border-bottom:1.5px solid var(--ink)">
+  <div class="section-head">
+    <div class="slabel">02 — Pollution Sources</div>
+    <h2 class="sr">What Is <em>Poisoning</em> Our Water?</h2>
+    <p class="sr">From factory pipes to farm fields — water contamination is simultaneous, compound, and accelerating.</p>
   </div>
-  <div class="causes-grid">
-    <div class="cause-card reveal">
-      <img class="cause-img" src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=600&q=80" alt="Industrial effluent discharge pipe"/>
-      <div class="cause-num">01</div>
-      <h3 class="cause-title">Industrial Effluents</h3>
-      <p class="cause-text">Factories discharge heavy metals (mercury, lead, arsenic), acids, dyes, and toxic solvents directly into rivers. India alone has over 50,000 industrial units releasing effluents, with textile and tannery clusters among the most destructive — the Bandi River in Rajasthan turns chemically-coloured seasonally.</p>
-      <span class="cause-badge">70% Dumped Untreated in Developing Nations</span>
+  <div class="bento">
+    <div class="bc w2 dk sr">
+      <div class="bc-bg-num">01</div>
+      <span class="bc-ico">🏭</span>
+      <h3>Industrial Effluents</h3>
+      <p>Factories discharge heavy metals — mercury, lead, arsenic — dyes, solvents and acids into rivers. India has 50,000+ industrial units releasing effluents. Textile and tannery clusters are most destructive; the Bandi River runs chemically coloured seasonally.</p>
+      <span class="bc-badge">70% dumped untreated in developing nations</span>
     </div>
-    <div class="cause-card reveal">
-      <img class="cause-img" src="https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=600&q=80" alt="Agricultural fields with fertilizer runoff"/>
-      <div class="cause-num">02</div>
-      <h3 class="cause-title">Agricultural Runoff</h3>
-      <p class="cause-text">Excess fertilisers (nitrogen, phosphorus), pesticides, and herbicides from farms flow into waterways, triggering algal blooms that deplete oxygen and create dead zones. India uses 17.5 million tonnes of fertilisers annually — much of it ending up in the Ganga-Brahmaputra basin.</p>
-      <span class="cause-badge">~60% of River Nitrogen from Agriculture</span>
+    <div class="bc wb sr">
+      <div class="bc-bg-num">02</div>
+      <span class="bc-ico">🌾</span>
+      <h3>Agricultural Runoff</h3>
+      <p>Excess fertilisers and pesticides flow into waterways, triggering oxygen-depleting algal blooms. India uses 17.5M tonnes of fertiliser/year — much enters the Ganga-Brahmaputra basin.</p>
+      <span class="bc-badge">~60% of river nitrogen from agriculture</span>
     </div>
-    <div class="cause-card reveal">
-      <img class="cause-img" src="https://images.unsplash.com/photo-1530981418487-31c371b3d3ca?w=600&q=80" alt="Sewage flowing into water"/>
-      <div class="cause-num">03</div>
-      <h3 class="cause-title">Untreated Sewage</h3>
-      <p class="cause-text">India generates about 72,368 MLD of sewage daily but only has treatment capacity for 31,841 MLD. Pathogens in raw sewage — cholera, typhoid, hepatitis A — claim hundreds of thousands of lives each year. Urban slums and riverbank communities bear the heaviest burden.</p>
-      <span class="cause-badge">Only 44% of India's Sewage Treated</span>
+    <div class="bc rd sr">
+      <div class="bc-bg-num">03</div>
+      <span class="bc-ico">🚽</span>
+      <h3>Untreated Sewage</h3>
+      <p>India generates 72,368 MLD of sewage daily but treats only 31,841 MLD. Pathogens in raw sewage — cholera, typhoid, hepatitis A — claim hundreds of thousands of lives annually.</p>
+      <span class="bc-badge">Only 44% treated in India</span>
     </div>
-    <div class="cause-card reveal">
-      <img class="cause-img" src="https://images.unsplash.com/photo-1530521954074-e64f6810b32d?w=600&q=80" alt="Plastic waste floating in ocean"/>
-      <div class="cause-num">04</div>
-      <h3 class="cause-title">Plastic Pollution</h3>
-      <p class="cause-text">11 million tonnes of plastic enter the oceans annually — a figure set to triple by 2040. Microplastics have been found in the deepest ocean trenches and in human blood. India is among the top contributors, generating 3.5 million tonnes of plastic waste per year with inadequate collection systems.</p>
-      <span class="cause-badge">11M Tonnes Enter Oceans Every Year</span>
+    <div class="bc sr" style="display:flex;flex-direction:column;justify-content:flex-end">
+      <div class="bignum" style="color:var(--acc2)">500+</div>
+      <div class="bignum-key">Ocean dead zones globally</div>
     </div>
-    <div class="cause-card reveal">
-      <img class="cause-img" src="https://images.unsplash.com/photo-1569163139599-0f4517e36f51?w=600&q=80" alt="Mining waste in river"/>
-      <div class="cause-num">05</div>
-      <h3 class="cause-title">Mining & Acid Drainage</h3>
-      <p class="cause-text">Mining operations expose sulphide minerals to air and water, generating sulphuric acid that leaches toxic metals — cadmium, zinc, arsenic — into groundwater and rivers. The Damodar River in Jharkhand-West Bengal carries decades of coal and coal washing effluents, earning it the name "River of Sorrow."</p>
-      <span class="cause-badge">Damodar: 75+ years of contamination</span>
+    <div class="bc sr" style="display:flex;flex-direction:column;justify-content:flex-end">
+      <div class="bignum" style="color:var(--acc)">11M</div>
+      <div class="bignum-key">Tonnes of plastic enter oceans yearly</div>
     </div>
-    <div class="cause-card reveal">
-      <img class="cause-img" src="https://images.unsplash.com/photo-1509629927-58a7b3a3a5bb?w=600&q=80" alt="Religious offerings floating in river"/>
-      <div class="cause-num">06</div>
-      <h3 class="cause-title">Religious & Solid Waste</h3>
-      <p class="cause-text">Millions of tonnes of solid waste — including flower offerings, idols, unburnt bodies, and cremation ash — are immersed in Indian rivers annually as part of cultural and religious practices. While individually small, the cumulative biochemical impact on rivers like the Ganga is significant and measurable.</p>
-      <span class="cause-badge">500M People Depend on the Ganga</span>
+    <div class="bc sr" style="display:flex;flex-direction:column;justify-content:flex-end">
+      <div class="bignum" style="color:var(--acc3)">3.5M</div>
+      <div class="bignum-key">Deaths per year from water pollution</div>
+    </div>
+    <div class="bc sr">
+      <div class="bc-bg-num">04</div>
+      <span class="bc-ico">🛍️</span>
+      <h3>Plastic Pollution</h3>
+      <p>India generates 3.5M tonnes of plastic waste/year. Microplastics found in ocean trenches and human blood. Set to triple by 2040 without action.</p>
+      <span class="bc-badge">India among top 5 global emitters</span>
+    </div>
+    <div class="bc bl sr">
+      <div class="bc-bg-num">05</div>
+      <span class="bc-ico">⛏️</span>
+      <h3>Mining &amp; Acid Drainage</h3>
+      <p>Mining exposes sulphides, generating sulphuric acid that leaches cadmium, arsenic, zinc into rivers. Damodar River carries 75+ years of coal industry contamination.</p>
+      <span class="bc-badge">"River of Sorrow" — Damodar</span>
+    </div>
+    <div class="bc w2 db sr">
+      <div class="bc-bg-num">06</div>
+      <span class="bc-ico">💊</span>
+      <h3>Pharmaceutical &amp; Chemical Waste</h3>
+      <p>Hyderabad's bulk drug manufacturing belt discharged so much antibiotic waste that downstream water contained therapeutic drug doses. Antibiotic-resistant bacteria bred in these waterways now threaten global medicine efficacy. India, Bangladesh, and China are primary pharmaceutical water contamination contributors.</p>
+      <span class="bc-badge">Global antibiotic resistance hotspot — Patancheru, Hyderabad</span>
     </div>
   </div>
 </section>
 
 <!-- CONSEQUENCES -->
-<section id="consequences">
-  <div class="cons-intro">
-    <p class="section-tag reveal">The Human & Ecological Toll</p>
-    <h2 class="reveal">Devastating Consequences<br>Across <em>Every Life System</em></h2>
+<section id="consequences" style="border-bottom:1.5px solid var(--ink)">
+  <div class="cons-header">
+    <div class="slabel">03 — Consequences</div>
+    <h2 class="sr">The Devastating Toll on Humans &amp; <em>Ecosystems</em></h2>
   </div>
-
-  <div class="con-row reveal">
-    <div class="con-img">
-      <img src="https://images.unsplash.com/photo-1559825481-12a05cc00344?w=900&q=85" alt="Child drinking contaminated water"/>
-      <div class="con-img-num">01</div>
-      <span class="con-img-badge">Public Health Emergency</span>
-    </div>
-    <div class="con-text">
-      <p class="section-tag">Health</p>
-      <h3>Contaminated Water Is a<br><em>Silent Killer</em></h3>
-      <p>Waterborne diseases — diarrhoea, cholera, typhoid, dysentery — kill approximately 3.5 million people per year, with children under five most vulnerable. In India, waterborne diseases account for 37.7 million cases annually, creating a massive healthcare burden concentrated in the poorest communities.</p>
-      <p>Heavy metal contamination — arsenic in West Bengal's groundwater, fluoride in Rajasthan — causes chronic conditions including cancer, neurological damage, and skeletal fluorosis affecting millions who have no alternative water source.</p>
-      <div class="con-stat-box">
-        <div class="con-stat"><div class="n">3.5M</div><div class="l">Deaths Per Year Globally</div></div>
-        <div class="con-stat"><div class="n">37.7M</div><div class="l">Waterborne Cases in India/yr</div></div>
-        <div class="con-stat"><div class="n">1 in 5</div><div class="l">Child Deaths from Water Disease</div></div>
+  <div class="crows">
+    <div class="crow sr">
+      <div class="cr-im">
+        <img src="https://images.unsplash.com/photo-1559825481-12a05cc00344?w=900&q=85" alt="Child near contaminated water"/>
+        <span class="cr-badge">Public Health</span>
+        <div class="cr-bign">01</div>
+      </div>
+      <div class="cr-tx">
+        <div class="slabel">Health Emergency</div>
+        <h3>Contaminated Water Is a <em>Silent Killer</em></h3>
+        <p>Waterborne diseases — diarrhoea, cholera, typhoid, dysentery — kill 3.5 million people per year, with children under five most vulnerable. India records 37.7 million waterborne disease cases annually — one dies every two minutes.</p>
+        <p>Heavy metal contamination poses an invisible chronic threat. Arsenic in West Bengal's groundwater, fluoride in Rajasthan, and lead in Delhi tap water cause cancer, neurological damage, and skeletal fluorosis — affecting millions with no alternative water source.</p>
+        <div class="cr-stats">
+          <div class="crs"><div class="sv">3.5M</div><div class="sl">Deaths/year globally</div></div>
+          <div class="crs"><div class="sv">37.7M</div><div class="sl">India waterborne cases/yr</div></div>
+          <div class="crs"><div class="sv">1 in 5</div><div class="sl">Child deaths, water disease</div></div>
+        </div>
       </div>
     </div>
-  </div>
-
-  <div class="con-row reveal">
-    <div class="con-img">
-      <img src="https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=900&q=85" alt="Dead fish in polluted water, algal bloom"/>
-      <div class="con-img-num">02</div>
-      <span class="con-img-badge">Aquatic Ecosystem Collapse</span>
-    </div>
-    <div class="con-text">
-      <p class="section-tag">Biodiversity</p>
-      <h3>River Ecosystems Are<br><em>Dying</em> Stretch by Stretch</h3>
-      <p>Oxygen-depleted "dead zones" caused by algal blooms from excess nutrients have created over 500 aquatic dead zones globally, covering an area larger than the United Kingdom. In India, the Sabarmati, Musi, and portions of the Ganga carry virtually no aquatic life in their heavily polluted urban stretches.</p>
-      <p>The Gangetic river dolphin — India's national aquatic animal — faces critical endangerment from pollution, entanglement, and habitat destruction. Its population has declined by over 50% in the past three decades.</p>
-      <div class="con-stat-box">
-        <div class="con-stat"><div class="n">500+</div><div class="l">Ocean Dead Zones</div></div>
-        <div class="con-stat"><div class="n">-50%</div><div class="l">Gangetic Dolphin Population</div></div>
+    <div class="crow sr">
+      <div class="cr-im">
+        <img src="https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=900&q=85" alt="Dead fish from algal bloom"/>
+        <span class="cr-badge">Biodiversity</span>
+        <div class="cr-bign">02</div>
+      </div>
+      <div class="cr-tx">
+        <div class="slabel">Ecosystem Collapse</div>
+        <h3>Rivers Are <em>Dying</em> Stretch by Stretch</h3>
+        <p>500+ ocean dead zones cover an area larger than the UK — created by nutrient runoff triggering algal blooms that consume all oxygen. India's Sabarmati, Cooum, and polluted Ganga stretches support virtually no aquatic life.</p>
+        <p>The Gangetic river dolphin — India's national aquatic animal — has lost over 50% of its population in three decades. Its collapse is a direct indicator of systemic river health failure across the Ganga-Brahmaputra system.</p>
+        <div class="cr-stats">
+          <div class="crs"><div class="sv">500+</div><div class="sl">Ocean dead zones</div></div>
+          <div class="crs"><div class="sv">−50%</div><div class="sl">Gangetic dolphin population</div></div>
+        </div>
       </div>
     </div>
-  </div>
-
-  <div class="con-row reveal">
-    <div class="con-img">
-      <img src="https://images.unsplash.com/photo-1504208434309-cb69f4fe52b0?w=900&q=85" alt="Parched land, failed crops"/>
-      <div class="con-img-num">03</div>
-      <span class="con-img-badge">Food Security Threat</span>
-    </div>
-    <div class="con-text">
-      <p class="section-tag">Agriculture</p>
-      <h3>Polluted Irrigation Is<br>Entering Our <em>Food</em></h3>
-      <p>Over 20 million hectares globally are irrigated with wastewater — a practice that deposits heavy metals, pathogens, and pharmaceutical residues directly into soil and food crops. In peri-urban India, vegetables grown with Yamuna water near Delhi show alarming levels of lead, cadmium, and faecal coliforms.</p>
-      <p>Groundwater contamination from agricultural chemicals and industrial leaching renders aquifers unusable across vast regions. In Punjab, widespread pesticide contamination has created cancer clusters in what locals call the "Cancer Train" belt.</p>
-      <div class="con-stat-box">
-        <div class="con-stat"><div class="n">20M ha</div><div class="l">Wastewater-Irrigated Land</div></div>
-        <div class="con-stat"><div class="n">600M</div><div class="l">Indians Lack Safe Groundwater</div></div>
+    <div class="crow sr">
+      <div class="cr-im">
+        <img src="https://images.unsplash.com/photo-1504208434309-cb69f4fe52b0?w=900&q=85" alt="Agricultural irrigation with polluted water"/>
+        <span class="cr-badge">Food Security</span>
+        <div class="cr-bign">03</div>
       </div>
-    </div>
-  </div>
-
-  <div class="con-row reveal">
-    <div class="con-img">
-      <img src="https://images.unsplash.com/photo-1601024445121-e5b82f020549?w=900&q=85" alt="Economic cost of water pollution"/>
-      <div class="con-img-num">04</div>
-      <span class="con-img-badge">Economic Devastation</span>
-    </div>
-    <div class="con-text">
-      <p class="section-tag">Economy</p>
-      <h3>Water Pollution Costs the<br>World <em>Trillions</em></h3>
-      <p>The World Bank estimates water insecurity and pollution cost the global economy $500 billion annually through reduced productivity, healthcare costs, and tourism losses. India loses approximately $6.7 billion per year to water pollution impacts — with the fishing, tourism, and agricultural sectors hardest hit.</p>
-      <p>Children exposed to heavy metals in water suffer permanent cognitive damage, reducing lifetime earning potential. The cascading economic consequences of a contaminated water supply compound generational poverty in the most affected communities.</p>
-      <div class="con-stat-box">
-        <div class="con-stat"><div class="n">$500B</div><div class="l">Global Annual Economic Loss</div></div>
-        <div class="con-stat"><div class="n">$6.7B</div><div class="l">India's Annual Loss</div></div>
+      <div class="cr-tx">
+        <div class="slabel">Food Chain</div>
+        <h3>Pollution Is Now<br>Entering Our <em>Food</em></h3>
+        <p>20 million hectares globally are irrigated with wastewater — depositing heavy metals, pathogens, and pharmaceutical residues into food crops. Vegetables grown with Yamuna water near Delhi show alarming lead, cadmium, and faecal coliform levels.</p>
+        <p>Punjab's pesticide-saturated groundwater has created cancer clusters. The Bathinda–Amritsar route is called the "Cancer Train" — entire villages show unprecedented cancer rates linked to decades of contaminated water consumption.</p>
+        <div class="cr-stats">
+          <div class="crs"><div class="sv">20M ha</div><div class="sl">Wastewater-irrigated land</div></div>
+          <div class="crs"><div class="sv">600M</div><div class="sl">Indians lack safe groundwater</div></div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- INTERACTIVE RIVER POLLUTION MAP -->
-<section id="river-map">
-  <div class="map-header">
-    <p class="section-tag reveal">Interactive Map</p>
-    <h2 class="reveal">Polluted Rivers — <em>Global & India</em></h2>
-    <p class="reveal">Explore pollution levels across major river systems. Click any marker to see water quality data, contamination type, and affected populations. Toggle between the global view and an India-focused deep-dive.</p>
-  </div>
-  <div class="map-container">
-    <div class="map-controls">
-      <button class="map-btn active" onclick="showView('global')">🌍 Global View</button>
-      <button class="map-btn" onclick="showView('india')">🇮🇳 India Focus</button>
+<!-- MAP -->
+<section id="mapwrap" class="map-wrap">
+  <div class="map-top">
+    <div class="map-side">
+      <div class="slabel">04 — Interactive Map</div>
+      <h2>Polluted Rivers — <em>Global &amp; India</em></h2>
+      <p>Click any marker to explore pollution levels, WQI scores, affected populations, and primary threats across 40+ documented river systems worldwide.</p>
+      <div class="mtabs">
+        <button class="mtab on" onclick="sw('global',this)">🌍 Global</button>
+        <button class="mtab" onclick="sw('india',this)">🇮🇳 India</button>
+        <button class="mtab" onclick="sw('asia',this)">🌏 Asia</button>
+      </div>
     </div>
-    <div id="leaflet-map"></div>
-    <div class="map-legend">
-      <h5>Pollution Level</h5>
-      <div class="legend-item"><div class="legend-dot" style="background:#e63946"></div>Critical</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#f4a261"></div>Severe</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#00b4d8"></div>Moderate</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#52b788"></div>Improving</div>
+    <div class="map-kpis">
+      <div class="mkpi"><div class="mkpi-v">351</div><div class="mkpi-k">Polluted Stretches India (CPCB)</div></div>
+      <div class="mkpi"><div class="mkpi-v">45×</div><div class="mkpi-k">Yamuna BOD Above Safe Level</div></div>
+      <div class="mkpi"><div class="mkpi-v">93%</div><div class="mkpi-k">Ocean Plastic from 10 Rivers</div></div>
     </div>
   </div>
-  <div class="map-info-panel">
-    <div class="map-info-card reveal">
-      <div class="mic-label">Critically Polluted Rivers</div>
-      <div class="mic-val">351</div>
-      <div class="mic-sub">River stretches in India identified by CPCB as critically or severely polluted</div>
+  <div id="map"></div>
+  <div class="map-leg">
+    <div class="ml"><div class="mldot" style="background:#e8380d"></div>Critical (WQI &lt;25)</div>
+    <div class="ml"><div class="mldot" style="background:#f5a623"></div>Severe (WQI 25–49)</div>
+    <div class="ml"><div class="mldot" style="background:#1a4fff"></div>Moderate (WQI 50–74)</div>
+    <div class="ml"><div class="mldot" style="background:#0aab6e"></div>Improving (WQI 75+)</div>
+  </div>
+</section>
+
+<!-- DATA -->
+<section class="data-grid">
+  <div class="dc sr">
+    <div class="slabel">Key Metrics</div>
+    <h2>India's <em>Water</em> Crisis</h2>
+    <p class="dsub">Documented, measurable, and worsening — despite decades of remediation efforts and billions of rupees spent.</p>
+    <div class="numg">
+      <div class="ngc"><div class="ngv">275</div><div class="ngk">Severely polluted stretches</div></div>
+      <div class="ngc"><div class="ngv">21</div><div class="ngk">Critically polluted rivers</div></div>
+      <div class="ngc"><div class="ngv">6×</div><div class="ngk">WHO BOD exceeded (avg)</div></div>
+      <div class="ngc"><div class="ngv">$6.7B</div><div class="ngk">Annual economic loss</div></div>
     </div>
-    <div class="map-info-card reveal">
-      <div class="mic-label">Top Global Polluters</div>
-      <div class="mic-val">10</div>
-      <div class="mic-sub">Rivers carry 93% of all plastic flowing into the ocean — 8 are in Asia</div>
-    </div>
-    <div class="map-info-card reveal">
-      <div class="mic-label">BOD Exceedance</div>
-      <div class="mic-val">45×</div>
-      <div class="mic-sub">The Yamuna near Delhi exceeds safe Biochemical Oxygen Demand limits by up to 45 times</div>
-    </div>
-    <div class="map-info-card reveal">
-      <div class="mic-label">Ganga Basin Population</div>
-      <div class="mic-val">500M</div>
-      <div class="mic-sub">People dependent on the Ganga for water, food, and livelihoods — many consuming polluted water daily</div>
+  </div>
+  <div class="dc sr">
+    <div class="slabel">Pollution Indicators</div>
+    <h2>The <em>Scale</em> of Contamination</h2>
+    <p class="dsub">Cross-cutting data revealing how deep the water crisis runs — from groundwater aquifers to oceanic dead zones.</p>
+    <div class="bar-list">
+      <div class="blr"><div class="blr-head"><span class="blr-lbl">Rivers with Unsafe Coliform Levels (India)</span><span class="blr-pct">89%</span></div><div class="btr"><div class="bfill bf-r" data-w="89%"></div></div></div>
+      <div class="blr"><div class="blr-head"><span class="blr-lbl">Ocean Plastic Traced to 10 Rivers</span><span class="blr-pct">93%</span></div><div class="btr"><div class="bfill bf-w" data-w="93%"></div></div></div>
+      <div class="blr"><div class="blr-head"><span class="blr-lbl">Groundwater Blocks Degraded (India)</span><span class="blr-pct">83%</span></div><div class="btr"><div class="bfill bf-r" data-w="83%"></div></div></div>
+      <div class="blr"><div class="blr-head"><span class="blr-lbl">India's Sewage Actually Treated</span><span class="blr-pct">44%</span></div><div class="btr"><div class="bfill bf-b" data-w="44%"></div></div></div>
+      <div class="blr"><div class="blr-head"><span class="blr-lbl">Global Aquifers Declining in Quality</span><span class="blr-pct">68%</span></div><div class="btr"><div class="bfill bf-b" data-w="68%"></div></div></div>
+      <div class="blr"><div class="blr-head"><span class="blr-lbl">Children in Polluted-River Districts (India)</span><span class="blr-pct">71%</span></div><div class="btr"><div class="bfill bf-w" data-w="71%"></div></div></div>
     </div>
   </div>
 </section>
 
-<!-- POLLUTION LEVELS / WQI SCENARIOS -->
-<section id="scenarios">
-  <div class="scenarios-header reveal">
-    <p class="section-tag">Water Quality Index</p>
-    <h2>What Each Pollution Level<br><em>Actually Means</em></h2>
-    <p>The Water Quality Index (WQI) distils multiple parameters into a single score. The difference between "Clean" and "Toxic" is not gradual — communities living with critically polluted water face cascading, irreversible health harm every day.</p>
+<!-- INDIA -->
+<section id="india" style="border-bottom:1.5px solid var(--ink)">
+  <div class="india-head">
+    <div>
+      <div class="slabel">05 — India Deep-Dive</div>
+      <h2 class="sr">Rivers Across India Are in <em>Crisis</em></h2>
+    </div>
+    <p class="aside sr">India's most sacred rivers are also its most polluted. Despite ₹20,000+ crore in programmes, major urban stretches remain critically toxic.</p>
   </div>
-  <div class="scenarios-grid">
-    <div class="sc-card reveal">
-      <div class="sc-img">
-        <img src="https://images.unsplash.com/photo-1502082553048-f009c37129b9?w=600&q=80" alt="Clean clear mountain river"/>
-        <div class="sc-overlay"></div>
-        <div class="sc-wqi">WQI<br>90+</div>
-      </div>
-      <div class="sc-body">
-        <span class="sc-label">Excellent / Clean</span>
-        <h4 class="sc-title">Safe for All Uses</h4>
-        <ul class="sc-list">
-          <li>Safe for drinking, swimming, irrigation</li>
-          <li>Supports diverse aquatic life</li>
-          <li>Himalayan headwaters, remote tributaries</li>
-          <li>Very rare in major Indian urban rivers</li>
-        </ul>
-      </div>
-    </div>
-    <div class="sc-card reveal">
-      <div class="sc-img">
-        <img src="https://images.unsplash.com/photo-1571984038-2e6a2a9fbbe6?w=600&q=80" alt="Slightly murky river"/>
-        <div class="sc-overlay"></div>
-        <div class="sc-wqi">WQI<br>50–89</div>
-      </div>
-      <div class="sc-body">
-        <span class="sc-label">Moderate Pollution</span>
-        <h4 class="sc-title">Requires Treatment</h4>
-        <ul class="sc-list">
-          <li>Needs treatment before drinking</li>
-          <li>Some aquatic life survives</li>
-          <li>Upper Ganga, parts of Brahmaputra</li>
-          <li>Suitable for irrigation with caution</li>
-        </ul>
-      </div>
-    </div>
-    <div class="sc-card reveal">
-      <div class="sc-img">
-        <img src="https://images.unsplash.com/photo-1621451537084-482c73073a0f?w=600&q=80" alt="Heavily polluted river with foam"/>
-        <div class="sc-overlay"></div>
-        <div class="sc-wqi">WQI<br>25–49</div>
-      </div>
-      <div class="sc-body">
-        <span class="sc-label">Severe Pollution</span>
-        <h4 class="sc-title">Hazardous Conditions</h4>
-        <ul class="sc-list">
-          <li>Unsafe for any direct human contact</li>
-          <li>Fish kills, algal blooms common</li>
-          <li>Ganga at Kanpur, Yamuna at Delhi</li>
-          <li>Causes disease outbreaks in communities</li>
-        </ul>
-      </div>
-    </div>
-    <div class="sc-card reveal">
-      <div class="sc-img">
-        <img src="https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?w=600&q=80" alt="Dead river, toxic foam, no life"/>
-        <div class="sc-overlay"></div>
-        <div class="sc-wqi">WQI<br>&lt;25</div>
-      </div>
-      <div class="sc-body">
-        <span class="sc-label">Critical / Toxic</span>
-        <h4 class="sc-title">Ecological Dead Zone</h4>
-        <ul class="sc-list">
-          <li>No aquatic life can survive</li>
-          <li>Toxic to human skin contact</li>
-          <li>Yamuna Delhi stretch, Cooum Chennai</li>
-          <li>Cannot be remediated without immediate cessation of all discharge</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- IMPACT DATA -->
-<section id="impact">
-  <div class="impact-layout">
-    <div class="impact-left">
-      <p class="section-tag reveal">The Data Crisis</p>
-      <h2 class="reveal">The Scale of<br><em>Contamination</em></h2>
-      <p class="reveal">India's water pollution crisis is measurable, documented, and accelerating. Despite decades of awareness and major programmes like Namami Gange, the gap between wastewater generation and treatment capacity continues to widen as urbanisation outpaces infrastructure.</p>
-      <div class="impact-num-grid reveal">
-        <div class="impact-num"><div class="n">275</div><div class="l">Severely Polluted Stretches (India)</div></div>
-        <div class="impact-num"><div class="n">21</div><div class="l">Rivers Critically Polluted</div></div>
-        <div class="impact-num"><div class="n">6X</div><div class="l">WHO-Permissible BOD Exceeded</div></div>
-        <div class="impact-num"><div class="n">$6.7B</div><div class="l">Annual Economic Loss (India)</div></div>
-      </div>
-    </div>
-    <div class="bars reveal">
-      <div class="bar-item"><div class="bar-meta"><span class="bar-name">Rivers with Unsafe Coliform Levels (India)</span><span class="bar-val">89%</span></div><div class="bar-track"><div class="bar-fill red" data-width="89%"></div></div></div>
-      <div class="bar-item"><div class="bar-meta"><span class="bar-name">Groundwater Blocks Overexploited or Polluted</span><span class="bar-val">83%</span></div><div class="bar-track"><div class="bar-fill red" data-width="83%"></div></div></div>
-      <div class="bar-item"><div class="bar-meta"><span class="bar-name">Population Without Safely Managed Water (Global)</span><span class="bar-val">74%</span></div><div class="bar-track"><div class="bar-fill warn" data-width="74%"></div></div></div>
-      <div class="bar-item"><div class="bar-meta"><span class="bar-name">India's Wastewater Treated</span><span class="bar-val">44%</span></div><div class="bar-track"><div class="bar-fill blue" data-width="44%"></div></div></div>
-      <div class="bar-item"><div class="bar-meta"><span class="bar-name">Ocean Plastic Traced to 10 Rivers</span><span class="bar-val">93%</span></div><div class="bar-track"><div class="bar-fill warn" data-width="93%"></div></div></div>
-      <div class="bar-item"><div class="bar-meta"><span class="bar-name">Global Aquifers Declining in Quality</span><span class="bar-val">68%</span></div><div class="bar-track"><div class="bar-fill blue" data-width="68%"></div></div></div>
-    </div>
-  </div>
-</section>
-
-<!-- INDIA FOCUS - REGIONAL -->
-<section id="india-focus">
-  <div class="india-title-block">
-    <p class="section-tag reveal">India Deep-Dive</p>
-    <h2 class="reveal">Rivers Across India Are<br>in <em>Crisis</em></h2>
-  </div>
-  <div class="regions-mosaic">
-    <div class="region-card tall reveal">
-      <img src="https://images.unsplash.com/photo-1598977054078-45df8c7e9ce2?w=800&q=80" alt="Ganga River with pollution" loading="lazy"/>
-      <div class="region-overlay"></div>
-      <div class="region-content">
-        <span class="region-badge">Critical — WQI &lt;30</span>
+  <div class="mosaic">
+    <div class="mc tall sr">
+      <img src="https://images.unsplash.com/photo-1598977054078-45df8c7e9ce2?w=800&q=80" alt="Ganga river pollution"/>
+      <div class="mc-ov"></div>
+      <div class="mc-body">
+        <span class="mctag t-crit">Critical — WQI &lt;30</span>
         <h3>The Ganga</h3>
-        <p>India's holiest river is critically polluted along 600+ km of its course. Industrial effluents from Kanpur's tanneries and untreated sewage from 118 towns push BOD levels 6× above safe limits. The ₹20,000 crore Namami Gange project has improved some stretches but the urban crisis persists.</p>
+        <p>India's most sacred river is critically polluted across 600+ km. Kanpur's tanneries, 118 towns' sewage, industrial discharge push BOD 6× safe limits. The ₹20,000 crore Namami Gange programme has improved headwaters but the Kanpur–Kolkata urban corridor remains critically toxic.</p>
       </div>
     </div>
-    <div class="region-card reveal">
-      <img src="https://images.unsplash.com/photo-1569163139599-0f4517e36f51?w=700&q=80" alt="Yamuna River Delhi pollution foam" loading="lazy"/>
-      <div class="region-overlay"></div>
-      <div class="region-content">
-        <span class="region-badge">Toxic — WQI &lt;15</span>
+    <div class="mc sr">
+      <img src="https://images.unsplash.com/photo-1569163139599-0f4517e36f51?w=700&q=80" alt="Yamuna toxic foam Delhi"/>
+      <div class="mc-ov"></div>
+      <div class="mc-body">
+        <span class="mctag t-tox">Toxic — WQI &lt;15</span>
         <h3>Yamuna — Delhi</h3>
-        <p>Delhi contributes 79% of Yamuna's entire pollution load across just 2% of its length. Toxic foam from phosphate detergents appears each winter festival season, a visible symbol of decades of neglect.</p>
+        <p>Delhi contributes 79% of Yamuna's entire pollution load across just 2% of its length. Toxic white foam appears every winter festival season.</p>
       </div>
     </div>
-    <div class="region-card reveal">
-      <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=700&q=80" alt="Industrial discharge Damodar River" loading="lazy"/>
-      <div class="region-overlay"></div>
-      <div class="region-content">
-        <span class="region-badge">Severe Industrial Pollution</span>
-        <h3>Damodar — Jharkhand</h3>
-        <p>The "River of Sorrow" carries coal washery effluents, heavy metals, and acidic drainage from 75+ years of mining operations in the Jharia and Raniganj coalfields, rendering its lower stretches biologically dead.</p>
+    <div class="mc sr">
+      <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=700&q=80" alt="Damodar coal waste river"/>
+      <div class="mc-ov"></div>
+      <div class="mc-body">
+        <span class="mctag t-crit">Critical — Industrial</span>
+        <h3>Damodar, Jharkhand</h3>
+        <p>"River of Sorrow" — 75 years of coal mining acid drainage and heavy metals have biologically killed its lower stretches.</p>
       </div>
     </div>
-    <div class="region-card reveal">
-      <img src="https://images.unsplash.com/photo-1580192985263-c20e1e43c2a8?w=700&q=80" alt="Periyar River Kerala with industrial pollution" loading="lazy"/>
-      <div class="region-overlay"></div>
-      <div class="region-content">
-        <span class="region-badge">Heavy Metal Contamination</span>
+    <div class="mc sr">
+      <img src="https://images.unsplash.com/photo-1580192985263-c20e1e43c2a8?w=700&q=80" alt="Periyar chemical pollution Kerala"/>
+      <div class="mc-ov"></div>
+      <div class="mc-body">
+        <span class="mctag t-sev">Severe — Chemical</span>
         <h3>Periyar — Kerala</h3>
-        <p>Once celebrated for biodiversity, the Periyar near Eloor industrial estate is contaminated with mercury, endosulfan, and other persistent pollutants from over 300 chemical factories operating along its banks.</p>
+        <p>300+ chemical factories near Eloor contaminate the river with mercury, endosulfan, and organochlorides. Fish kills are endemic.</p>
+      </div>
+    </div>
+    <div class="mc sr">
+      <img src="https://images.unsplash.com/photo-1601024445121-e5b82f020549?w=700&q=80" alt="Pharmaceutical effluent river"/>
+      <div class="mc-ov"></div>
+      <div class="mc-body">
+        <span class="mctag t-sev">Severe — Pharma</span>
+        <h3>Musi — Hyderabad</h3>
+        <p>Bulk drug manufacturers' antibiotic effluents have bred multi-drug-resistant superbugs in the river sediment — a global health threat.</p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- TIMELINE -->
-<section id="timeline">
-  <p class="section-tag reveal">A Chronicle of Contamination</p>
-  <h2 class="reveal">Decades of <em>Warnings</em><br>Largely Unheeded</h2>
-  <div class="timeline">
-    <div class="tl-item reveal">
-      <div class="tl-year">1948</div>
-      <div class="tl-dot-wrap"><div class="tl-dot"></div></div>
-      <div class="tl-body"><h3>Ganga Pollution First Documented</h3><p>Post-independence India begins large-scale industrialisation. Scientists first document alarming levels of faecal contamination in the Ganga at Varanasi, marking the beginning of a systematic decline that accelerates with every decade of unchecked growth.</p></div>
-    </div>
-    <div class="tl-item reveal">
-      <div class="tl-year">1974</div>
-      <div class="tl-dot-wrap"><div class="tl-dot"></div></div>
-      <div class="tl-body"><h3>Water (Prevention & Control of Pollution) Act</h3><p>India's landmark legislation creates the Central Pollution Control Board. Despite being a legal framework for water protection, enforcement remains chronically weak, with most industrial units flouting norms for decades without consequences.</p></div>
-    </div>
-    <div class="tl-item reveal">
-      <div class="tl-year">1986</div>
-      <div class="tl-dot-wrap"><div class="tl-dot warn"></div></div>
-      <div class="tl-body"><h3>Ganga Action Plan Launched</h3><p>India's first large-scale river cleanup initiative, costing ₹902 crore, targets 25 cities on the Ganga. Independent assessments later find the plan had little measurable impact — pollution levels continued rising through the 1990s due to inadequate maintenance and rapid urban growth.</p></div>
-    </div>
-    <div class="tl-item reveal">
-      <div class="tl-year">2005</div>
-      <div class="tl-dot-wrap"><div class="tl-dot hot"></div></div>
-      <div class="tl-body"><h3>WHO: 1.8M Child Deaths from Water Disease</h3><p>WHO reports that waterborne diarrhoea kills 1.8 million children under five each year globally — more than HIV/AIDS and malaria combined. The vast majority are in South and Southeast Asia, with India accounting for a disproportionate share.</p></div>
-    </div>
-    <div class="tl-item reveal">
-      <div class="tl-year">2015</div>
-      <div class="tl-dot-wrap"><div class="tl-dot warn"></div></div>
-      <div class="tl-body"><h3>Namami Gange Programme — ₹20,000 Crore</h3><p>India's most ambitious river rejuvenation programme is launched with a massive budget. By 2024, progress includes new sewage treatment plants and solid waste management, but the Ganga remains polluted in major urban stretches, with the Delhi–Kanpur corridor persistently critical.</p></div>
-    </div>
-    <div class="tl-item reveal">
-      <div class="tl-year">2023</div>
-      <div class="tl-dot-wrap"><div class="tl-dot hot"></div></div>
-      <div class="tl-body"><h3>CPCB: 351 Polluted River Stretches Identified</h3><p>India's Central Pollution Control Board releases its most comprehensive assessment yet — 351 river stretches are polluted, up from 302 in 2018. Maharashtra leads with 55 polluted stretches, followed by Assam, Madhya Pradesh, and Uttar Pradesh. The trend is worsening.</p></div>
-    </div>
-    <div class="tl-item reveal">
-      <div class="tl-year">2030</div>
-      <div class="tl-dot-wrap"><div class="tl-dot warn"></div></div>
-      <div class="tl-body"><h3>SDG 6 Deadline: Safe Water for All</h3><p>The United Nations Sustainable Development Goal 6 commits all nations to ensuring clean water and sanitation for all by 2030. At current trajectories, neither India nor the global community is on track. The deadline is five years away — the gap between aspiration and reality has never been wider.</p></div>
-    </div>
+<section class="tl-wrap">
+  <div class="tl-head">
+    <div class="slabel">06 — Historical Record</div>
+    <h2 class="sr">A Chronicle of <em>Warnings</em> Unheeded</h2>
+    <p class="sr">Decades of science, legislation, and cleanup programmes trace a predictable arc of escalating crisis.</p>
+  </div>
+  <div class="tl-grid">
+    <div class="tlc sr"><div class="tlc-year">1948</div><div class="tlc-dot"></div><h3>Ganga Pollution First Documented</h3><p>Post-independence industrialisation begins. Scientists first measure alarming faecal contamination at Varanasi — a decline accelerating with every passing decade.</p></div>
+    <div class="tlc sr"><div class="tlc-year">1974</div><div class="tlc-dot"></div><h3>Water Pollution Act — India</h3><p>CPCB established. Legal framework exists but enforcement is chronically weak. Most industrial units flout norms for decades without consequence.</p></div>
+    <div class="tlc warn sr"><div class="tlc-year">1986</div><div class="tlc-dot"></div><h3>Ganga Action Plan</h3><p>₹902 crore initiative targeting 25 cities. Independent assessments later confirm minimal measurable impact — pollution continued rising through the 1990s.</p></div>
+    <div class="tlc hot sr"><div class="tlc-year">2002</div><div class="tlc-dot"></div><h3>Patancheru Drug Crisis</h3><p>Studies find Hyderabad pharmaceutical discharge so severe downstream water contains therapeutic antibiotic doses. Global antibiotic resistance alarm is raised.</p></div>
+    <div class="tlc hot sr"><div class="tlc-year">2005</div><div class="tlc-dot"></div><h3>WHO: 1.8M Child Deaths/yr</h3><p>Water disease kills more children under five than HIV/AIDS and malaria combined. India accounts for a disproportionate share of this global burden.</p></div>
+    <div class="tlc warn sr"><div class="tlc-year">2015</div><div class="tlc-dot"></div><h3>Namami Gange — ₹20,000 Cr</h3><p>India's most ambitious river rejuvenation programme launched. STPs built, but the Kanpur–Delhi urban corridor remains critically polluted by 2025.</p></div>
+    <div class="tlc hot sr"><div class="tlc-year">2023</div><div class="tlc-dot"></div><h3>CPCB: 351 Polluted Stretches</h3><p>Comprehensive assessment shows 351 polluted river stretches — up from 302 in 2018. Maharashtra, Assam, MP, UP lead. Trend is worsening.</p></div>
+    <div class="tlc warn sr"><div class="tlc-year">2030</div><div class="tlc-dot"></div><h3>SDG 6 Deadline Looming</h3><p>UN commitment: clean water for all by 2030. At current trajectories, neither India nor the global community is close to meeting this goal.</p></div>
   </div>
 </section>
 
 <!-- SOLUTIONS -->
-<section id="solutions">
-  <div class="solutions-header">
-    <div>
-      <p class="section-tag reveal">The Way Forward</p>
-      <h2 class="reveal">Evidence-Based<br><em>Solutions</em> Exist</h2>
-    </div>
-    <p class="reveal">The technology and policy frameworks to solve water pollution are well-understood. The challenge is political will, equitable financing, and enforcement — not a lack of knowledge about what needs to be done.</p>
+<section id="solutions" style="border-bottom:1.5px solid var(--ink)">
+  <div class="sol-head">
+    <div class="slabel">07 — The Way Forward</div>
+    <h2 class="sr">Evidence-Based <em>Solutions</em> Exist</h2>
+    <p class="sr">The technology and policy frameworks to solve water pollution are well understood. The barrier is not knowledge — it is political will, funding, and accountability.</p>
   </div>
-  <div class="solutions-grid">
-    <div class="sol-card reveal">
-      <div class="sol-img"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" alt="Sewage treatment plant" loading="lazy"/></div>
-      <div class="sol-body"><span class="sol-num">01 — Infrastructure</span><h3>Sewage Treatment Scale-Up</h3><p>India needs to more than double its sewage treatment capacity to close the 40,000+ MLD gap between generation and treatment. Decentralised treatment systems — including constructed wetlands and biodigesters — offer scalable, lower-cost solutions for smaller urban centres and rural areas.</p></div>
-    </div>
-    <div class="sol-card reveal">
-      <div class="sol-img"><img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=600&q=80" alt="Organic farming with water conservation" loading="lazy"/></div>
-      <div class="sol-body"><span class="sol-num">02 — Agriculture</span><h3>Clean Farming Practices</h3><p>Transitioning to precision agriculture, drip irrigation, organic farming, and buffer zones along waterways can dramatically reduce fertiliser and pesticide runoff. Zero-liquid-discharge mandates for agricultural zones near rivers could protect downstream communities at relatively low cost.</p></div>
-    </div>
-    <div class="sol-card reveal">
-      <div class="sol-img"><img src="https://images.unsplash.com/photo-1509391366360-2e959784a276?w=600&q=80" alt="Industrial effluent treatment" loading="lazy"/></div>
-      <div class="sol-body"><span class="sol-num">03 — Industry</span><h3>Zero Liquid Discharge</h3><p>Mandating Zero Liquid Discharge (ZLD) for textile, tannery, chemical, and pharmaceutical industries — as increasingly required in India's National Green Tribunal orders — prevents effluents from reaching waterways. Real-time online monitoring systems can detect violations instantly.</p></div>
-    </div>
-    <div class="sol-card reveal">
-      <div class="sol-img"><img src="https://images.unsplash.com/photo-1530521954074-e64f6810b32d?w=600&q=80" alt="Plastic waste collection from river" loading="lazy"/></div>
-      <div class="sol-body"><span class="sol-num">04 — Plastic</span><h3>Plastic Reduction & Interception</h3><p>River plastic interception systems, extended producer responsibility policies, and single-use plastic bans form a multi-layered approach. Nations that have implemented comprehensive bans — Rwanda, the EU — demonstrate that policy-led plastic reduction is achievable within a decade.</p></div>
-    </div>
-    <div class="sol-card reveal">
-      <div class="sol-img"><img src="https://images.unsplash.com/photo-1448375240586-882707db888b?w=600&q=80" alt="Wetland restoration for water purification" loading="lazy"/></div>
-      <div class="sol-body"><span class="sol-num">05 — Nature</span><h3>Wetland & Riparian Restoration</h3><p>Natural wetlands can filter up to 90% of water contaminants. Restoring floodplains, riparian buffers, and urban lakes provides free, resilient water treatment infrastructure. India has lost 30% of its wetland area since 1970; restoring even a fraction would yield massive water quality dividends.</p></div>
-    </div>
-    <div class="sol-card reveal">
-      <div class="sol-img"><img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=600&q=80" alt="Water policy and governance" loading="lazy"/></div>
-      <div class="sol-body"><span class="sol-num">06 — Governance</span><h3>Enforcement & Water Rights</h3><p>Real-time pollution monitoring, independent judicial oversight, community water rights recognition, and criminal penalties for industrial polluters are non-negotiable. Countries with the cleanest water — Switzerland, Finland, Denmark — share rigorous independent regulatory regimes that prioritise public health over industrial profit.</p></div>
-    </div>
+  <div class="sol-grid">
+    <div class="sc sr"><img class="sc-img" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" alt="Sewage treatment plant"/><div class="sc-n">01 — Infrastructure</div><h3>Scale Sewage Treatment</h3><p>India must more than double treatment capacity to close the 40,000+ MLD gap. Decentralised systems — constructed wetlands, biodigesters — offer scalable, low-cost paths for smaller cities and rural areas.</p></div>
+    <div class="sc sr"><img class="sc-img" src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=600&q=80" alt="Sustainable farming near waterway"/><div class="sc-n">02 — Agriculture</div><h3>Clean Farming Practices</h3><p>Precision agriculture, drip irrigation, organic farming, and riparian buffer zones dramatically reduce fertiliser and pesticide runoff into India's most vulnerable rivers.</p></div>
+    <div class="sc sr"><img class="sc-img" src="https://images.unsplash.com/photo-1509391366360-2e959784a276?w=600&q=80" alt="Industrial zero-liquid discharge"/><div class="sc-n">03 — Industry</div><h3>Zero Liquid Discharge</h3><p>Mandating ZLD for textile, tannery, chemical, and pharma industries — as ordered by India's National Green Tribunal — prevents effluents reaching waterways. Real-time monitoring catches violations instantly.</p></div>
+    <div class="sc sr"><img class="sc-img" src="https://images.unsplash.com/photo-1530521954074-e64f6810b32d?w=600&q=80" alt="Plastic collection river"/><div class="sc-n">04 — Plastic</div><h3>Intercept River Plastic</h3><p>River interception systems, extended producer responsibility laws, and single-use bans form a layered solution. Nations with comprehensive bans show policy-led plastic reduction is achievable within a decade.</p></div>
+    <div class="sc sr"><img class="sc-img" src="https://images.unsplash.com/photo-1448375240586-882707db888b?w=600&q=80" alt="Wetland ecosystem restoration"/><div class="sc-n">05 — Nature</div><h3>Restore Wetlands</h3><p>Natural wetlands filter up to 90% of water contaminants. India has lost 30% of its wetland area since 1970. Even partial restoration delivers enormous water quality dividends for downstream communities.</p></div>
+    <div class="sc sr"><img class="sc-img" src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=600&q=80" alt="Environmental governance policy"/><div class="sc-n">06 — Governance</div><h3>Enforce &amp; Empower</h3><p>Real-time monitoring, independent judicial oversight, community water rights, and criminal penalties for polluters are non-negotiable. The world's cleanest rivers — in Scandinavia and Switzerland — share rigorous independent enforcement regimes.</p></div>
   </div>
 </section>
 
 <!-- CTA -->
-<section id="cta">
-  <div class="cta-bg"></div>
-  <div class="cta-overlay"></div>
-  <div class="cta-inner reveal">
-    <p class="section-tag" style="justify-content:center">The Imperative</p>
-    <h2>The Window for<br><em>Clean Water</em> Is Closing</h2>
-    <p>Every river left unchecked, every sewage line that bypasses treatment, every tonne of industrial waste discharged is a choice. The solutions exist. The science is unequivocal. What remains is political will — and your voice is part of that.</p>
-    <div class="cta-buttons">
-      <a href="https://www.who.int/news-room/fact-sheets/detail/drinking-water" target="_blank" class="btn-primary">WHO Drinking Water Facts</a>
-      <a href="https://www.cpcb.nic.in" target="_blank" class="btn-outline">CPCB India Data</a>
+<section id="cta" class="cta-band">
+  <h2>The Window<br>Is <em>Closing</em></h2>
+  <div class="cta-r">
+    <p>Every river left unchecked, every sewage line bypassed, every tonne of industrial waste discharged is a choice. The solutions exist. The science is unequivocal. What remains is political will — and your voice is part of that collective.</p>
+    <div class="cta-btns">
+      <a href="https://www.who.int/news-room/fact-sheets/detail/drinking-water" target="_blank" class="btn-w">WHO Water Facts</a>
+      <a href="https://www.cpcb.nic.in" target="_blank" class="btn-o">CPCB India Data</a>
     </div>
   </div>
 </section>
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-grid">
-    <div class="footer-brand">
-      <div class="logo">AQU<span>A</span></div>
-      <p>An educational synthesis of water pollution science, drawing from WHO, CPCB, UNEP, World Bank, and peer-reviewed research. All data sourced from published scientific literature and government reports.</p>
+  <div class="fg">
+    <div>
+      <div class="fb-brand">Hydr<em>a</em></div>
+      <p class="fb-desc">An educational synthesis of water pollution science drawing from WHO, CPCB, UNEP, World Bank, and peer-reviewed research. All data sourced from published scientific literature.</p>
     </div>
-    <div class="footer-col">
+    <div class="fc">
       <h4>Sections</h4>
       <ul>
         <li><a href="#intro">Overview</a></li>
         <li><a href="#causes">Pollution Sources</a></li>
-        <li><a href="#consequences">Consequences</a></li>
-        <li><a href="#river-map">River Map</a></li>
-        <li><a href="#impact">Data & Impact</a></li>
+        <li><a href="#mapwrap">River Map</a></li>
+        <li><a href="#india">India Deep-Dive</a></li>
         <li><a href="#solutions">Solutions</a></li>
       </ul>
     </div>
-    <div class="footer-col">
+    <div class="fc">
       <h4>Key Sources</h4>
       <ul>
         <li><a href="https://www.who.int/health-topics/drinking-water" target="_blank">WHO Drinking Water</a></li>
         <li><a href="https://www.cpcb.nic.in" target="_blank">CPCB India Reports</a></li>
         <li><a href="https://www.unep.org/topics/fresh-water" target="_blank">UNEP Freshwater</a></li>
         <li><a href="https://www.worldbank.org/en/topic/water" target="_blank">World Bank Water</a></li>
-        <li><a href="https://nmcg.nic.in" target="_blank">Namami Gange Programme</a></li>
+        <li><a href="https://nmcg.nic.in" target="_blank">Namami Gange · NMCG</a></li>
       </ul>
     </div>
   </div>
-  <div class="footer-bottom">
-    <p>© 2026 Aqua — Water Pollution Report · Educational purposes only</p>
-    <p class="sources">Sources: WHO 2023 · CPCB Annual Reports · UNEP Freshwater Outlook · World Bank Water Reports · Namami Gange NMCG · Central Water Commission India</p>
+  <div class="fb">
+    <p>© 2026 Hydra — Water Pollution Report · Educational purposes only</p>
+    <p>Sources: WHO 2023 · CPCB · UNEP · World Bank · NMCG</p>
   </div>
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
-/* Custom cursor */
-const cur = document.getElementById('cursor');
-const ring = document.getElementById('cursorRing');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
-function animRing(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing)}
-animRing();
-document.querySelectorAll('a,button').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{cur.style.width='18px';cur.style.height='18px';ring.style.width='52px';ring.style.height='52px'});
-  el.addEventListener('mouseleave',()=>{cur.style.width='10px';cur.style.height='10px';ring.style.width='36px';ring.style.height='36px'});
-});
-
-/* Progress bar */
 window.addEventListener('scroll',()=>{
-  const s=document.documentElement.scrollTop;
-  const h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
-  document.getElementById('progress').style.width=(s/h*100)+'%';
+  const s=document.documentElement.scrollTop,h=document.documentElement.scrollHeight-window.innerHeight;
+  document.getElementById('rbar').style.width=(s/h*100)+'%';
 });
+const ro=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');ro.unobserve(x.target)}})},{threshold:.08});
+document.querySelectorAll('.sr').forEach(el=>ro.observe(el));
+document.querySelectorAll('.bento,.sol-grid,.tl-grid').forEach(g=>{g.querySelectorAll('.sr').forEach((c,i)=>c.style.transitionDelay=(i*.06)+'s')});
+const bro=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.querySelectorAll('.bfill').forEach((b,i)=>{setTimeout(()=>b.style.width=b.getAttribute('data-w'),i*90+120)});bro.unobserve(x.target)}})},{threshold:.25});
+document.querySelectorAll('.bar-list').forEach(b=>bro.observe(b));
 
-/* Sticky nav */
-const nav=document.getElementById('navbar');
-window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>60));
+/* ── MAP ── */
+const lmap=L.map('map',{center:[20,20],zoom:2,zoomControl:true,attributionControl:false});
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:16}).addTo(lmap);
+const C='#e8380d',S='#f5a623',M='#1a4fff',O='#0aab6e';
+function icon(c){return L.divIcon({className:'',html:`<div style="width:13px;height:13px;border-radius:50%;background:${c};border:2px solid rgba(255,255,255,.7);box-shadow:0 0 0 3px ${c}33,0 2px 8px rgba(0,0,0,.6)"></div>`,iconSize:[13,13],iconAnchor:[6,6]})}
+const stmap={Critical:{c:'st-c',l:'Critical'},Severe:{c:'st-s',l:'Severe'},Moderate:{c:'st-m',l:'Moderate'},Improving:{c:'st-o',l:'Improving'}};
+function mkpop(d){const s=stmap[d.s]||stmap.Moderate;return `<div class="pi"><div class="pi-top"><div><div class="pi-name">${d.name}</div><div class="pi-loc">${d.loc}</div></div><span class="pi-st ${s.c}">${s.l}</span></div><p class="pi-desc">${d.desc}</p><div class="pi-data"><div><div class="pid-v">${d.wqi}</div><div class="pid-k">WQI Score</div></div><div><div class="pid-v">${d.pop}</div><div class="pid-k">Pop. At Risk</div></div></div><div class="pi-threat"><strong>Threat:</strong> ${d.threat}</div></div>`}
 
-/* Reveal on scroll */
-const obs=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}});
-},{threshold:.1});
-document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
-
-/* Stagger grid children */
-document.querySelectorAll('.causes-grid,.solutions-grid,.scenarios-grid,.regions-mosaic,.impact-num-grid').forEach(grid=>{
-  grid.querySelectorAll('.reveal').forEach((c,i)=>c.style.transitionDelay=(i*.1)+'s');
-});
-
-/* Animate bars */
-const barObs=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
-    if(e.isIntersecting){
-      e.target.querySelectorAll('.bar-fill').forEach((b,i)=>{
-        const w=b.getAttribute('data-width');
-        setTimeout(()=>b.style.width=w,i*120+200);
-      });
-      barObs.unobserve(e.target);
-    }
-  });
-},{threshold:.3});
-document.querySelectorAll('.bars').forEach(b=>barObs.observe(b));
-
-/* ===== LEAFLET MAP ===== */
-const mapEl = document.getElementById('leaflet-map');
-const map = L.map(mapEl, {
-  center: [20, 78],
-  zoom: 5,
-  zoomControl: true,
-  attributionControl: false
-});
-
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  maxZoom: 16
-}).addTo(map);
-
-// Custom marker factory
-function makeIcon(color) {
-  return L.divIcon({
-    className: '',
-    html: `<div style="
-      width:16px;height:16px;border-radius:50%;
-      background:${color};
-      border:2px solid rgba(255,255,255,.6);
-      box-shadow:0 0 0 4px ${color}44,0 2px 8px rgba(0,0,0,.5);
-    "></div>`,
-    iconSize: [16, 16],
-    iconAnchor: [8, 8]
-  });
-}
-
-const CRITICAL = '#e63946';
-const SEVERE   = '#f4a261';
-const MODERATE = '#00b4d8';
-const OK       = '#52b788';
-
-const statusClass = {
-  'Critical': 'status-critical',
-  'Severe':   'status-severe',
-  'Moderate': 'status-moderate',
-  'Improving':'status-clean'
-};
-
-function popup(data) {
-  return `<div style="min-width:200px;padding:4px 2px">
-    <div class="popup-title">${data.name}</div>
-    <div class="popup-location">${data.loc}</div>
-    <div style="font-size:.78rem;color:rgba(255,255,255,.55);line-height:1.55;margin-bottom:.5rem">${data.desc}</div>
-    <div class="popup-row">
-      <div class="popup-stat"><div class="pv" style="color:${data.color}">${data.wqi}</div><div class="pl">WQI Score</div></div>
-      <div class="popup-stat"><div class="pv" style="color:#90e0ef">${data.pop}</div><div class="pl">Pop. Affected</div></div>
-    </div>
-    <div style="margin-top:.6rem;font-size:.74rem;color:rgba(255,255,255,.45)"><strong style="color:rgba(255,255,255,.65)">Primary threat:</strong> ${data.threat}</div>
-    <span class="popup-status ${statusClass[data.status]}">${data.status}</span>
-  </div>`;
-}
-
-// ---- DATA ----
-const indiaRivers = [
-  { lat:25.55, lng:80.35, color:CRITICAL, name:"Ganga — Kanpur Stretch", loc:"Uttar Pradesh, India", wqi:"18", pop:"~12M", threat:"Tannery effluents, untreated sewage, BOD 6× safe limit", status:"Critical",
-    desc:"The most polluted stretch of the Ganga. Over 400 tanneries and 3 major sewage drains pour waste directly into the river." },
-  { lat:28.65, lng:77.30, color:CRITICAL, name:"Yamuna — Delhi Stretch", loc:"Delhi, India", wqi:"12", pop:"~20M", threat:"Untreated sewage, industrial effluents, phosphate detergents (toxic foam)", status:"Critical",
-    desc:"Delhi contributes 79% of the Yamuna's entire pollution load across just 2% of its length. Infamous for toxic white foam at Kalindi Kunj." },
-  { lat:26.45, lng:80.35, color:SEVERE, name:"Ganga — Allahabad", loc:"Prayagraj, Uttar Pradesh", wqi:"32", pop:"~5M", threat:"Domestic sewage, religious offerings, pharmaceutical runoff", status:"Severe",
-    desc:"At the sacred Triveni Sangam, coliform bacteria levels regularly exceed safe limits 100-fold, yet millions bathe here during Kumbh Mela." },
-  { lat:25.30, lng:82.97, color:CRITICAL, name:"Ganga — Varanasi", loc:"Varanasi, Uttar Pradesh", wqi:"22", pop:"~4M", threat:"Crematoria runoff, domestic sewage, untreated drain outlets", status:"Critical",
-    desc:"Ghats receive raw sewage from 84 drains. Despite treatment plants, sewage bypass during rains renders water critically toxic seasonally." },
-  { lat:23.85, lng:86.35, color:CRITICAL, name:"Damodar River", loc:"Jharkhand – West Bengal", wqi:"14", pop:"~8M", threat:"Coal mining acid drainage, heavy metals, coal washeries", status:"Critical",
-    desc:"75 years of continuous coal mining have turned this 'River of Sorrow' into an open drain for cadmium, zinc, iron, and sulphuric acid." },
-  { lat:10.05, lng:76.35, color:SEVERE, name:"Periyar — Eloor", loc:"Ernakulam, Kerala", wqi:"29", pop:"~3M", threat:"Mercury, endosulfan, organochlorides from 300+ chemical factories", status:"Severe",
-    desc:"The Eloor industrial estate on the Periyar is one of India's most chemically contaminated sites. Fish kills and health disorders are endemic." },
-  { lat:13.10, lng:80.27, color:CRITICAL, name:"Cooum River", loc:"Chennai, Tamil Nadu", wqi:"8", pop:"~7M", threat:"Sewage, solid waste, zero dissolved oxygen — biologically dead", status:"Critical",
-    desc:"The Cooum is widely considered India's most polluted urban river. It carries zero dissolved oxygen for most of its course through Chennai." },
-  { lat:18.52, lng:73.86, color:SEVERE, name:"Mula-Mutha River", loc:"Pune, Maharashtra", wqi:"26", pop:"~6M", threat:"Industrial effluents, pharmaceutical waste, urban sewage", status:"Severe",
-    desc:"Pune's river system receives effluents from IT parks, pharma companies, and residential areas with insufficient treatment capacity." },
-  { lat:23.17, lng:79.95, color:SEVERE, name:"Narmada — Jabalpur Zone", loc:"Madhya Pradesh", wqi:"38", pop:"~2M", threat:"Municipal sewage, marble quarrying runoff, agricultural chemicals", status:"Severe",
-    desc:"While the Narmada's upper course is relatively cleaner, industrial zones near Jabalpur and Hoshangabad show rising BOD and coliform levels." },
-  { lat:22.57, lng:88.36, color:SEVERE, name:"Hooghly — Kolkata", loc:"West Bengal", wqi:"31", pop:"~15M", threat:"Industrial effluents, jute mill waste, domestic sewage from 3 districts", status:"Severe",
-    desc:"The Hooghly receives the effluent load of Kolkata's vast industrial belt. Tanneries, jute mills, and dyeing units are primary sources." },
-  { lat:26.12, lng:91.72, color:MODERATE, name:"Brahmaputra — Guwahati", loc:"Assam", wqi:"52", pop:"~2M", threat:"Urban encroachment, oil refinery runoff, occasional industrial discharge", status:"Moderate",
-    desc:"The Brahmaputra remains relatively cleaner due to its massive flow but is increasingly threatened by Assam's oil industry and rapid urbanisation." },
-  { lat:30.32, lng:78.03, color:OK, name:"Ganga — Rishikesh", loc:"Uttarakhand", wqi:"76", pop:"~150K", threat:"Minimal — growing tourism and ashram effluents pose increasing risk", status:"Improving",
-    desc:"The upper Ganga near Rishikesh remains relatively clean. It is the goal of conservation projects to maintain and extend this clean stretch downstream." },
+const india=[
+  {lat:25.55,lng:80.35,c:C,s:'Critical',name:'Ganga — Kanpur',loc:'Uttar Pradesh, India',wqi:'18',pop:'~12M',threat:'Tannery effluents, untreated sewage — BOD 6× safe limit',desc:'Most polluted Ganga stretch. 400+ tanneries and 3 sewage drains pour waste directly. BOD routinely 6× WHO limit.'},
+  {lat:28.65,lng:77.30,c:C,s:'Critical',name:'Yamuna — Delhi',loc:'Delhi, India',wqi:'12',pop:'~20M',threat:'Untreated sewage, phosphate detergents causing toxic foam',desc:'Delhi contributes 79% of Yamuna\'s pollution across just 2% of its length. Toxic white foam visible every festival season.'},
+  {lat:26.45,lng:81.83,c:S,s:'Severe',name:'Ganga — Prayagraj',loc:'Uttar Pradesh, India',wqi:'32',pop:'~5M',threat:'Domestic sewage, religious waste, pharmaceutical runoff',desc:'Coliform levels 100× safe limit at Triveni Sangam — yet millions bathe here during Kumbh Mela.'},
+  {lat:25.30,lng:82.97,c:C,s:'Critical',name:'Ganga — Varanasi',loc:'Uttar Pradesh, India',wqi:'22',pop:'~4M',threat:'84 raw sewage drains, crematoria runoff',desc:'Despite new STPs, 84 raw drains still discharge. Monsoon bypass renders water critically toxic seasonally.'},
+  {lat:22.57,lng:88.36,c:S,s:'Severe',name:'Hooghly — Kolkata',loc:'West Bengal, India',wqi:'31',pop:'~15M',threat:'Industrial effluents, jute mills, domestic sewage',desc:'Kolkata\'s industrial belt — tanneries, jute mills, dyeing units — severely loads the Hooghly.'},
+  {lat:23.85,lng:86.35,c:C,s:'Critical',name:'Damodar River',loc:'Jharkhand–West Bengal',wqi:'14',pop:'~8M',threat:'Coal mining acid drainage, cadmium, zinc, heavy metals',desc:'"River of Sorrow" — 75 years of coal mining have turned this into an open sewer for sulphuric acid and toxic metals.'},
+  {lat:10.05,lng:76.35,c:S,s:'Severe',name:'Periyar — Eloor',loc:'Kerala, India',wqi:'29',pop:'~3M',threat:'Mercury, endosulfan, organochlorides from 300+ chemical factories',desc:'Eloor industrial estate is one of India\'s most chemically contaminated sites. Fish kills and illness are endemic.'},
+  {lat:13.10,lng:80.27,c:C,s:'Critical',name:'Cooum River',loc:'Chennai, Tamil Nadu',wqi:'8',pop:'~7M',threat:'Sewage, solid waste — zero dissolved oxygen; biologically dead',desc:'Considered India\'s most polluted urban river. Carries zero dissolved oxygen through Chennai. No aquatic life survives.'},
+  {lat:18.52,lng:73.86,c:S,s:'Severe',name:'Mula-Mutha — Pune',loc:'Maharashtra, India',wqi:'26',pop:'~6M',threat:'Industrial effluents, pharmaceutical waste, urban sewage',desc:'Pune\'s rivers receive IT park, pharma, and residential effluents with insufficient treatment capacity to cope.'},
+  {lat:30.32,lng:78.03,c:O,s:'Improving',name:'Ganga — Rishikesh',loc:'Uttarakhand, India',wqi:'76',pop:'~150K',threat:'Growing tourism and ashram effluents are an increasing risk',desc:'The upper Ganga remains relatively clean. Conservation goal is to maintain and extend this clean reach downstream.'},
+  {lat:26.12,lng:91.72,c:M,s:'Moderate',name:'Brahmaputra — Guwahati',loc:'Assam, India',wqi:'52',pop:'~2M',threat:'Oil refinery runoff, urban encroachment, industrial discharge',desc:'Remains cleaner due to massive flow but threatened by Assam\'s oil industry and rapid urbanisation.'},
+  {lat:17.37,lng:78.47,c:C,s:'Critical',name:'Musi River — Hyderabad',loc:'Telangana, India',wqi:'11',pop:'~10M',threat:'Pharmaceutical effluents, antibiotic-resistant bacteria, sewage',desc:'Hyderabad\'s drug belt discharged so much antibiotic waste that sediment breeds multi-drug-resistant superbugs — a global hotspot.'},
+  {lat:22.30,lng:73.20,c:S,s:'Severe',name:'Vishwamitri — Vadodara',loc:'Gujarat, India',wqi:'27',pop:'~2M',threat:'Industrial effluents, pesticide runoff, municipal waste',desc:'Crocodiles in the river show alarming industrial toxin accumulation. Heavily industrialised catchment with insufficient treatment.'},
+  {lat:25.37,lng:74.63,c:C,s:'Critical',name:'Banas — Bhilwara',loc:'Rajasthan, India',wqi:'16',pop:'~1M',threat:'Textile dye effluents, fluoride contamination, heavy metals',desc:'Bhilwara\'s textile industry discharges intensely coloured dye effluents — the Banas periodically runs in vivid chemical colours.'},
+  {lat:19.07,lng:72.87,c:S,s:'Severe',name:'Ulhas River — Mumbai',loc:'Maharashtra, India',wqi:'24',pop:'~21M',threat:'Municipal sewage, MIDC chemical effluents, solid waste',desc:'Mumbai\'s catchment river receives MIDC industrial area effluents. Mangrove degradation accelerates buildup.'},
+  {lat:12.97,lng:77.59,c:M,s:'Moderate',name:'Arkavathi — Bengaluru',loc:'Karnataka, India',wqi:'43',pop:'~1.5M',threat:'STP failures, urban runoff, pharmaceutical discharge',desc:'Bengaluru\'s water network has shrunk 70% since the 1960s. Remaining lakes receive chemical effluents from tech corridors.'},
+  {lat:26.85,lng:80.95,c:C,s:'Critical',name:'Gomti — Lucknow',loc:'Uttar Pradesh, India',wqi:'19',pop:'~3.5M',threat:'Heavy sewage, tannery effluents, solid waste — BOD 8× limit',desc:'One of UP\'s most polluted stretches. BOD readings routinely 8× permissible limit near Lucknow city centre.'},
+  {lat:21.15,lng:79.09,c:S,s:'Severe',name:'Wardha River',loc:'Maharashtra–Telangana',wqi:'33',pop:'~3M',threat:'Coal power plant ash, agricultural pesticides, sewage',desc:'Drains India\'s coal belt — receives fly ash and coal washery effluents across the Vidarbha region.'},
+  {lat:23.17,lng:79.95,c:M,s:'Moderate',name:'Narmada — Jabalpur Zone',loc:'Madhya Pradesh, India',wqi:'38',pop:'~2M',threat:'Municipal sewage, marble quarrying runoff, agricultural chemicals',desc:'While upper Narmada is cleaner, industrial zones near Jabalpur show rising BOD and coliform levels.'},
 ];
 
-const globalRivers = [
-  { lat:31.00, lng:121.47, color:CRITICAL, name:"Yangtze River", loc:"China", wqi:"15", pop:"~400M", threat:"Industrial chemicals, heavy metals, microplastics, sewage from 400+ cities", status:"Critical",
-    desc:"The world's 3rd longest river carries massive pollution from China's industrial heartland. 30 billion tonnes of wastewater are discharged annually." },
-  { lat:14.70, lng:100.52, color:CRITICAL, name:"Chao Phraya", loc:"Bangkok, Thailand", wqi:"17", pop:"~14M", threat:"Industrial waste, untreated sewage, heavy metals, oxygen depletion", status:"Critical",
-    desc:"The Chao Phraya flowing through Bangkok is critically oxygen-depleted in urban stretches, with fish populations collapsed across much of its lower course." },
-  { lat:6.60, lng:3.35, color:CRITICAL, name:"Lagos Lagoon", loc:"Nigeria", wqi:"11", pop:"~21M", threat:"Oil spills, industrial waste, untreated sewage, solid waste dumping", status:"Critical",
-    desc:"One of Africa's most polluted water bodies, the Lagos Lagoon receives waste from 21 million people with less than 10% sewage treatment capacity." },
-  { lat:-12.10, lng:-77.05, color:SEVERE, name:"Rimac River", loc:"Lima, Peru", wqi:"24", pop:"~10M", threat:"Mining acid drainage, arsenic, lead, mercury, urban sewage", status:"Severe",
-    desc:"Lima's primary water source is severely contaminated by upstream mining operations. High arsenic and lead levels affect drinking water quality for millions." },
-  { lat:40.74, lng:29.88, color:SEVERE, name:"Sakarya River", loc:"Turkey", wqi:"28", pop:"~5M", threat:"Industrial effluents, textile dyes, agricultural runoff, heavy metals", status:"Severe",
-    desc:"Turkey's heavily industrialised Marmara region discharges textile and industrial waste into the Sakarya, causing persistent ecological damage." },
-  { lat:53.90, lng:27.56, color:MODERATE, name:"Svislach River", loc:"Minsk, Belarus", wqi:"45", pop:"~2M", threat:"Urban runoff, industrial discharge, improving with investment", status:"Moderate",
-    desc:"Minsk's river has seen improvement after targeted remediation but still carries elevated levels of heavy metals and nutrients from surrounding industry." },
-  { lat:51.45, lng:0.00, color:OK, name:"Thames", loc:"London, UK", wqi:"72", pop:"~9M", threat:"Combined sewer overflows remain, microplastics growing concern", status:"Improving",
-    desc:"Once declared biologically dead in the 1950s, the Thames is now home to 115 fish species after decades of treatment investment — a model for recovery." },
-  { lat:48.85, lng:2.35, color:MODERATE, name:"Seine River", loc:"Paris, France", wqi:"48", pop:"~12M", threat:"Combined sewer overflows, agricultural runoff, pharmaceutical residues", status:"Moderate",
-    desc:"Despite major investments for the 2024 Olympics, the Seine still faces chronic combined sewer overflow events during rain, discharging raw sewage." },
-  { lat:41.00, lng:29.02, color:SEVERE, name:"Golden Horn", loc:"Istanbul, Turkey", wqi:"33", pop:"~15M", threat:"Industrial discharge, urban sewage, oxygen depletion in brackish zones", status:"Severe",
-    desc:"Istanbul's historic waterway receives significant industrial and domestic pollution. Hydrogen sulphide events kill fish periodically in the enclosed bay." },
-  { lat:-23.55, lng:-46.63, color:SEVERE, name:"Tietê River", loc:"São Paulo, Brazil", wqi:"22", pop:"~22M", threat:"Untreated sewage, industrial chemicals, zero dissolved oxygen (100km)", status:"Severe",
-    desc:"South America's most polluted river runs through São Paulo. A 100 km stretch near the city carries zero dissolved oxygen despite a $4 billion cleanup programme." },
-  { lat:41.88, lng:12.48, color:MODERATE, name:"Tiber River", loc:"Rome, Italy", wqi:"44", pop:"~4M", threat:"Agricultural runoff, urban stormwater, some industrial discharge", status:"Moderate",
-    desc:"Rome's iconic river faces growing pressure from urban expansion and inadequate stormwater management, with coliform spikes after heavy rain events." },
-  { lat:30.06, lng:31.22, color:SEVERE, name:"Nile — Cairo Stretch", loc:"Cairo, Egypt", wqi:"27", pop:"~20M", threat:"Industrial effluents, agricultural chemicals, municipal waste, sedimentation", status:"Severe",
-    desc:"Egypt's urban Nile receives effluents from leather tanneries, sugar processing, and chemical plants, with the Cairo stretch seeing severe coliform contamination." },
+const asia=[
+  {lat:31.00,lng:121.47,c:C,s:'Critical',name:'Yangtze River',loc:'China',wqi:'15',pop:'~400M',threat:'Industrial chemicals, heavy metals, microplastics, urban sewage',desc:'World\'s 3rd longest river carries massive pollution from China\'s industrial heartland. 30 billion tonnes of wastewater discharged annually.'},
+  {lat:14.70,lng:100.52,c:C,s:'Critical',name:'Chao Phraya',loc:'Bangkok, Thailand',wqi:'17',pop:'~14M',threat:'Industrial waste, sewage, oxygen depletion',desc:'Critically oxygen-depleted in urban stretches. Fish populations collapsed across much of its lower course through Bangkok.'},
+  {lat:23.63,lng:90.50,c:C,s:'Critical',name:'Buriganga — Dhaka',loc:'Bangladesh',wqi:'9',pop:'~22M',threat:'Tannery chromium waste, textile dyes, raw sewage',desc:'One of Asia\'s most polluted rivers. Dhaka\'s leather tanneries discharge chromium directly. Dissolved oxygen near zero year-round.'},
+  {lat:33.90,lng:113.60,c:C,s:'Critical',name:'Huai River',loc:'China',wqi:'13',pop:'~150M',threat:'Industrial and agricultural pollution, heavy metals',desc:'A 2004 pollution surge killed all aquatic life across 100+ km overnight. Home to severe industrial pollution for decades.'},
+  {lat:14.09,lng:108.27,c:S,s:'Severe',name:'Mekong — Central Stretch',loc:'Laos–Cambodia',wqi:'35',pop:'~70M',threat:'Dam-induced sediment loss, agricultural runoff, overfishing',desc:'The Mekong\'s ecology is collapsing: upstream Chinese dams cut sediment flow while chemical agriculture runoff increases downstream.'},
+  {lat:3.15,lng:101.70,c:S,s:'Severe',name:'Klang River',loc:'Kuala Lumpur, Malaysia',wqi:'28',pop:'~8M',threat:'Industrial effluents, solid waste, sewage bypass',desc:'KL\'s urban river receives effluents from electronics and chemical factories. Cleanup slow despite Malaysia\'s economic development.'},
+  {lat:10.82,lng:106.63,c:S,s:'Severe',name:'Saigon River',loc:'Ho Chi Minh City, Vietnam',wqi:'30',pop:'~10M',threat:'Industrial discharge, urban sewage, aquaculture waste',desc:'HCMC\'s rapid industrial growth has severely degraded this river. Factory waste and aquaculture chemicals are primary contributors.'},
+  {lat:21.03,lng:105.84,c:C,s:'Critical',name:'To Lich River',loc:'Hanoi, Vietnam',wqi:'19',pop:'~8M',threat:'Raw sewage, zero dissolved oxygen, industrial effluents',desc:'Hanoi\'s urban river is biologically dead for most of its course. Multiple cleanup attempts — including a 2019 Japanese biotech trial — have largely failed.'},
+  {lat:37.56,lng:127.00,c:M,s:'Moderate',name:'Han River — Seoul',loc:'South Korea',wqi:'58',pop:'~25M',threat:'Urban runoff, historical industrial pollution, microplastics',desc:'Dramatically improved since 1980s through massive investment. Now supports recreational fishing, though microplastics and urban stormwater remain concerns.'},
+  {lat:35.68,lng:139.69,c:M,s:'Moderate',name:'Sumida River',loc:'Tokyo, Japan',wqi:'53',pop:'~13M',threat:'Urban stormwater overflow, microplastics',desc:'Once severely polluted, Tokyo\'s Sumida has seen remarkable recovery. Japan\'s water infrastructure investment is a global model.'},
 ];
 
-let currentMarkers = [];
+const global=[
+  {lat:6.60,lng:3.35,c:C,s:'Critical',name:'Lagos Lagoon',loc:'Nigeria',wqi:'11',pop:'~21M',threat:'Oil spills, industrial waste, untreated sewage',desc:'One of Africa\'s most polluted water bodies. Lagos Lagoon receives waste from 21M people with less than 10% treatment capacity.'},
+  {lat:-12.10,lng:-77.05,c:S,s:'Severe',name:'Rimac River',loc:'Lima, Peru',wqi:'24',pop:'~10M',threat:'Mining acid drainage, arsenic, lead, mercury',desc:"Lima's primary water source contaminated by upstream mining. High arsenic and lead affect drinking water for millions."},
+  {lat:-23.55,lng:-46.63,c:S,s:'Severe',name:'Tietê River',loc:'São Paulo, Brazil',wqi:'22',pop:'~22M',threat:'Untreated sewage, zero dissolved oxygen (100 km)',desc:'South America\'s most polluted river. 100 km stretch has zero dissolved oxygen despite a $4B cleanup programme.'},
+  {lat:30.06,lng:31.22,c:S,s:'Severe',name:'Nile — Cairo',loc:'Egypt',wqi:'27',pop:'~20M',threat:'Tanneries, sugar processing plants, agricultural chemicals',desc:'The urban Nile receives tannery, chemical plant, and sugar processing effluents in contrast to the cleaner upstream reaches.'},
+  {lat:51.45,lng:0.00,c:O,s:'Improving',name:'Thames',loc:'London, UK',wqi:'72',pop:'~9M',threat:'Combined sewer overflows, microplastics',desc:'Declared biologically dead in the 1950s, now home to 115 fish species after 70 years of treatment investment — a model for recovery.'},
+  {lat:48.85,lng:2.35,c:M,s:'Moderate',name:'Seine River',loc:'Paris, France',wqi:'48',pop:'~12M',threat:'Combined sewer overflows, agricultural runoff, pharmaceuticals',desc:'Despite major 2024 Olympics cleanup investments, the Seine still faces combined sewer overflow events during heavy rain.'},
+  {lat:41.00,lng:28.97,c:S,s:'Severe',name:'Golden Horn',loc:'Istanbul, Turkey',wqi:'33',pop:'~15M',threat:'Industrial discharge, urban sewage, hydrogen sulphide events',desc:'Istanbul\'s historic waterway receives industrial and domestic pollution. Hydrogen sulphide events periodically kill fish in the enclosed bay.'},
+  {lat:-33.87,lng:151.21,c:M,s:'Moderate',name:'Parramatta River',loc:'Sydney, Australia',wqi:'47',pop:'~2M',threat:'Urban stormwater, historical industrial contamination, microplastics',desc:'Once one of the world\'s most polluted rivers, targeted cleanup has improved Parramatta significantly. Microplastic issues persist.'},
+  {lat:41.88,lng:12.48,c:M,s:'Moderate',name:'Tiber River',loc:'Rome, Italy',wqi:'44',pop:'~4M',threat:'Agricultural runoff, urban stormwater, historical industrial discharge',desc:'Coliform spikes after heavy rain remain a persistent problem. Urban expansion puts growing pressure on the river system.'},
+  {lat:-34.60,lng:-58.38,c:S,s:'Severe',name:'Matanza-Riachuelo',loc:'Buenos Aires, Argentina',wqi:'18',pop:'~8M',threat:'Industrial chemicals, heavy metals, sewage, solid waste',desc:'One of the world\'s most contaminated rivers. 15,000+ industries in basin. A 2008 Supreme Court order mandated cleanup — progress is slow.'},
+  {lat:55.75,lng:37.62,c:M,s:'Moderate',name:'Moscow River',loc:'Russia',wqi:'41',pop:'~12M',threat:'Urban stormwater, historical industrial pollution',desc:'Moscow\'s urban river has improved since Soviet-era peak pollution. Investment in tertiary treatment has aided measurable recovery.'},
+  {lat:4.35,lng:18.57,c:C,s:'Critical',name:'Congo River — Kinshasa',loc:'DR Congo',wqi:'16',pop:'~17M',threat:'Untreated sewage, mining runoff, solid waste',desc:'Despite enormous natural flow, the Congo near Kinshasa receives raw sewage from one of Africa\'s largest cities with minimal treatment.'},
+  {lat:25.04,lng:102.71,c:C,s:'Critical',name:'Dian Lake',loc:'Yunnan, China',wqi:'14',pop:'~6M',threat:'Agricultural phosphorus, industrial effluents, toxic algal blooms',desc:'Once China\'s most scenic highland lake, now periodically covered by toxic algal blooms from agricultural runoff.'},
+  {lat:43.30,lng:-79.87,c:O,s:'Improving',name:'Hamilton Harbour',loc:'Ontario, Canada',wqi:'68',pop:'~700K',threat:'Legacy industrial contamination, combined sewer overflows',desc:'Once a symbol of industrial pollution, Hamilton Harbour has made significant progress. Fish populations are returning after decades of remediation.'},
+  {lat:40.74,lng:29.88,c:S,s:'Severe',name:'Sakarya River',loc:'Turkey',wqi:'28',pop:'~5M',threat:'Textile dyes, industrial effluents, heavy metals',desc:'Turkey\'s Marmara industrial region discharges textile and industrial waste into the Sakarya, causing persistent ecological damage.'},
+];
 
-function clearMarkers() {
-  currentMarkers.forEach(m => m.remove());
-  currentMarkers = [];
+let marks=[];
+function clear(){marks.forEach(m=>m.remove());marks=[];}
+function add(data){data.forEach(d=>{const m=L.marker([d.lat,d.lng],{icon:icon(d.c)}).addTo(lmap).bindPopup(mkpop(d),{className:'wp',maxWidth:290,minWidth:250});marks.push(m);})}
+
+function sw(v,btn){
+  document.querySelectorAll('.mtab').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  clear();
+  if(v==='india'){lmap.flyTo([22,80],5,{duration:1.2});add(india);}
+  else if(v==='asia'){lmap.flyTo([18,102],4,{duration:1.2});add([...asia,...india]);}
+  else{lmap.flyTo([20,20],2,{duration:1.2});add([...global,...asia,...india]);}
 }
-
-function addMarkers(data) {
-  data.forEach(d => {
-    const marker = L.marker([d.lat, d.lng], { icon: makeIcon(d.color) })
-      .addTo(map)
-      .bindPopup(popup(d), { className: 'river-popup', maxWidth: 280 });
-    currentMarkers.push(marker);
-  });
-}
-
-function showView(view) {
-  document.querySelectorAll('.map-btn').forEach(b => b.classList.remove('active'));
-  event.target.classList.add('active');
-  clearMarkers();
-  if (view === 'india') {
-    map.flyTo([22.5, 82], 5, { duration: 1.2 });
-    addMarkers(indiaRivers);
-  } else {
-    map.flyTo([20, 20], 2, { duration: 1.2 });
-    addMarkers([...globalRivers, ...indiaRivers]);
-  }
-}
-
-// Initial load — both
-map.setView([22, 50], 3);
-addMarkers([...globalRivers, ...indiaRivers]);
+add([...global,...asia,...india]);
 </script>
 </body>
 </html>
